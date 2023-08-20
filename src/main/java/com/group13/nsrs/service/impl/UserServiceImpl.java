@@ -97,7 +97,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         String code = registerDto.getCode();
         String realCode = redisTemplate.opsForValue().get(phone);
         if (!code.equals(realCode)) {
-            Result.fail(ResultCodeEnum.CODE_ERROR);
+            return Result.fail(ResultCodeEnum.CODE_ERROR);
         }
         // 验证码一致，删除redis中的验证码
         redisTemplate.delete(phone);

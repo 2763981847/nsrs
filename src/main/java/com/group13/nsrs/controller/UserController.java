@@ -28,12 +28,12 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/login")
-    public Result<String> login(LoginDto loginDto) {
+    public Result<String> login(@RequestBody LoginDto loginDto) {
         return userService.login(loginDto);
     }
 
     @PostMapping("/register")
-    public Result<String> register(RegisterDto registerDto) {
+    public Result<String> register(@RequestBody RegisterDto registerDto) {
         return userService.register(registerDto);
     }
 
@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @PutMapping
-    public Result<String> updateUser(UserUpdateDto userUpdateDto) {
+    public Result<String> updateUser(@RequestBody UserUpdateDto userUpdateDto) {
         return Result.ok();
     }
 
