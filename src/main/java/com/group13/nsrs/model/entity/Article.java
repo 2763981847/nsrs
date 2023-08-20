@@ -9,18 +9,17 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * 
  * @author Oreki
  * @TableName article
  */
-@TableName(value ="article")
+@TableName(value = "article")
 @Data
 @ApiModel("文章实体类")
 public class Article implements Serializable {
     /**
      * 文章id
      */
-    @TableId(value = "id")
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
@@ -86,7 +85,7 @@ public class Article implements Serializable {
     /**
      * 创建时间
      */
-    @TableField(value = "created_time",fill = FieldFill.INSERT)
+    @TableField(value = "created_time", fill = FieldFill.INSERT)
     private LocalDateTime createdTime;
 
     @TableField(exist = false)

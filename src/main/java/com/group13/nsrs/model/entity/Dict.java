@@ -18,7 +18,7 @@ public class Dict implements Serializable {
     /**
      * 
      */
-    @TableField(value = "id")
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**

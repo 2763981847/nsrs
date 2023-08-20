@@ -18,7 +18,7 @@ public class Student implements Serializable {
     /**
      * 学生id
      */
-    @TableId(value = "id")
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**

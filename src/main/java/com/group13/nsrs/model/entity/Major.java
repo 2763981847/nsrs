@@ -17,7 +17,7 @@ public class Major implements Serializable {
     /**
      * 专业id
      */
-    @TableId(value = "id")
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**

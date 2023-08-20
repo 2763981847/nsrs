@@ -6,3 +6,12 @@ spring:
     url: jdbc:mysql://autumnclouds.cn:3306/nsrs
     username: group13
     password: 123456
+  redis:
+    host: ${VPS_HOST}
+    port: 6379
+    password: ${PASSWORD}
+aliyun:
+  sms:
+    regionId: default
+    accessKeyId: LTAI5tA2YTNq9cW6jakNQpye
+    secret: ${ALI_SECRET}
