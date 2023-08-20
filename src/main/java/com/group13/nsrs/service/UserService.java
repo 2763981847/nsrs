@@ -2,9 +2,11 @@ package com.group13.nsrs.service;
 
 import com.group13.nsrs.model.dto.LoginDto;
 import com.group13.nsrs.model.dto.RegisterDto;
+import com.group13.nsrs.model.dto.UpdatePWDto;
 import com.group13.nsrs.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.group13.nsrs.model.vo.LoginVo;
+import com.group13.nsrs.model.vo.UserVo;
 import com.group13.nsrs.util.Result;
 
 /**
@@ -19,4 +21,8 @@ public interface UserService extends IService<User> {
     Result<LoginVo> register(RegisterDto registerDto);
 
     boolean sendCode(String phone, String code);
+
+    Result<UserVo> findPassword(String phone, String code);
+
+    Result<String> updatePassword(UpdatePWDto updatePWDto);
 }

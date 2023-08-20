@@ -2,6 +2,7 @@ package com.group13.nsrs.controller;
 
 import com.group13.nsrs.model.entity.College;
 import com.group13.nsrs.util.Result;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/college")
+@Api(tags = "学院信息接口")
 public class CollegeController {
     @GetMapping("/{id}")
     public Result<College> getCollegeInfo(@PathVariable Long id) {

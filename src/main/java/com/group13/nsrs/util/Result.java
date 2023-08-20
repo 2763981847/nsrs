@@ -91,7 +91,7 @@ public class Result<T> {
         return flag ? Result.ok() : Result.fail();
     }
 
-    public Result<T> message(String msg) {
+    public  Result<T> message(String msg) {
         this.setMessage(msg);
         return this;
     }

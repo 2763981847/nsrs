@@ -2,6 +2,9 @@ package com.group13.nsrs.service;
 
 import com.group13.nsrs.model.entity.Article;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.group13.nsrs.util.Result;
+
+import java.util.List;
 
 /**
 * @author Oreki
@@ -10,4 +13,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface ArticleService extends IService<Article> {
 
+    Result<List<Article>> getOwnArticles();
+
+    Result<List<Article>> getArticlesByAuthorId(Long authorId);
 }

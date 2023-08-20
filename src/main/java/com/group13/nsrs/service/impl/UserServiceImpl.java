@@ -13,9 +13,11 @@ import com.aliyuncs.profile.DefaultProfile;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.group13.nsrs.model.dto.LoginDto;
 import com.group13.nsrs.model.dto.RegisterDto;
+import com.group13.nsrs.model.dto.UpdatePWDto;
 import com.group13.nsrs.model.entity.Student;
 import com.group13.nsrs.model.entity.User;
 import com.group13.nsrs.model.vo.LoginVo;
+import com.group13.nsrs.model.vo.UserVo;
 import com.group13.nsrs.service.StudentService;
 import com.group13.nsrs.service.UserService;
 import com.group13.nsrs.mapper.UserMapper;
@@ -97,12 +99,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //  检验验证码是否一致
         String phone = registerDto.getPhone();
         String code = registerDto.getCode();
-        String realCode = redisTemplate.opsForValue().get(phone);
-        if (!code.equals(realCode)) {
-            return Result.fail(ResultCodeEnum.CODE_ERROR);
-        }
-        // 验证码一致，删除redis中的验证码
-        redisTemplate.delete(phone);
+        boolean success = checkCode(phone, code);
+        if (!success) return Result.fail(ResultCodeEnum.CODE_ERROR);
         // 新建用户
         User user = BeanUtil.copyProperties(registerDto, User.class);
         user.setSalt(RandomUtil.getFourBitRandom());
@@ -112,6 +110,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         LoginVo loginVo = BeanUtil.copyProperties(user, LoginVo.class);
         loginVo.setToken(token);
         return Result.ok(loginVo);
+    }
+
+    private boolean checkCode(String phone, String code) {
+        String realCode = redisTemplate.opsForValue().get(phone);
+        if (!code.equals(realCode)) {
+            return false;
+        }
+        // 验证码一致，删除redis中的验证码
+        redisTemplate.delete(phone);
+        return true;
     }
 
     @Override
@@ -150,6 +158,55 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         return false;
     }
+
+    @Override
+    public Result<UserVo> findPassword(String phone, String code) {
+        boolean success = checkCode(phone, code);
+        if (!success) return Result.fail(ResultCodeEnum.CODE_ERROR);
+        User user = this.lambdaQuery().eq(User::getPhone, phone).one();
+        if (user == null) {
+            return Result.fail(ResultCodeEnum.DATA_NOT_EXIST, "用户不存在");
+        }
+        return Result.ok(BeanUtil.copyProperties(user, UserVo.class));
+    }
+
+    @Override
+    public Result<String> updatePassword(UpdatePWDto updatePWDto) {
+        // 判断是修改密码还是重置密码
+        String oldPassword = updatePWDto.getOldPassword();
+        Long userId = updatePWDto.getUserId();
+        String newPassword = updatePWDto.getNewPassword();
+        User user = this.getById(userId);
+        if (StringUtils.isEmpty(oldPassword)) {
+            // 重置密码
+            boolean success = this.updatePassword(user, newPassword);
+            return Result.judge(success);
+        }
+        // 修改密码
+        // 校验旧密码是否正确
+        String salt = user.getSalt();
+        String encryptPassword = encryptPassword(oldPassword, salt);
+        if (!encryptPassword.equals(user.getPassword())) {
+            return Result.fail(ResultCodeEnum.PASSWORD_ERROR);
+        }
+        // 校验新密码是否与旧密码相同
+        if (oldPassword.equals(newPassword)) {
+            return Result.fail(ResultCodeEnum.PASSWORD_ERROR, "新旧密码不能相同");
+        }
+        // 修改密码
+        return Result.judge(this.updatePassword(user, newPassword));
+    }
+
+    private boolean updatePassword(User user, String newPassword) {
+        if (user == null) {
+            return false;
+        }
+        String salt = user.getSalt();
+        String encryptPassword = encryptPassword(newPassword, salt);
+        user.setPassword(encryptPassword);
+        return this.updateById(user);
+    }
+
 }
 
 

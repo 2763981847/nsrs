@@ -2,13 +2,16 @@ package com.group13.nsrs.controller;
 
 import com.group13.nsrs.model.dto.LoginDto;
 import com.group13.nsrs.model.dto.RegisterDto;
+import com.group13.nsrs.model.dto.UpdatePWDto;
 import com.group13.nsrs.model.dto.UserUpdateDto;
+import com.group13.nsrs.model.entity.User;
 import com.group13.nsrs.model.vo.LoginVo;
 import com.group13.nsrs.model.vo.UserVo;
 import com.group13.nsrs.service.UserService;
 import com.group13.nsrs.util.RandomUtil;
 import com.group13.nsrs.util.Result;
 import com.group13.nsrs.util.ResultCodeEnum;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/api/user")
+@Api(tags = "用户信息接口")
 public class UserController {
 
     @Resource
@@ -49,9 +53,10 @@ public class UserController {
         return Result.ok();
     }
 
-    @PutMapping("/password/{oldPassword}/{newPassword}")
-    public Result<String> updatePassword(@PathVariable String oldPassword, @PathVariable String newPassword) {
-        return Result.ok();
+    @ApiOperation("更改密码")
+    @PutMapping("/password")
+    public Result<String> updatePassword(@RequestBody UpdatePWDto updatePWDto) {
+        return userService.updatePassword(updatePWDto);
     }
 
     @Resource
@@ -76,5 +81,11 @@ public class UserController {
         } else {
             return Result.fail(ResultCodeEnum.SERVICE_ERROR, "短信发送失败");
         }
+    }
+
+    @ApiOperation("找回密码")
+    @GetMapping("password/{phone}/{code}/")
+    public Result<UserVo> findPassword(@PathVariable String phone, @PathVariable String code) {
+        return userService.findPassword(phone, code);
     }
 }

@@ -2,6 +2,7 @@ package com.group13.nsrs.controller;
 
 import com.group13.nsrs.model.dto.StudentUpdateDto;
 import com.group13.nsrs.util.Result;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/student")
+@Api(tags = "学生信息接口")
 public class StudentController {
     @PutMapping
     public Result<String> updateStudent(@RequestBody StudentUpdateDto studentUpdateDto) {
