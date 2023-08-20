@@ -7,7 +7,7 @@ import com.group13.nsrs.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.group13.nsrs.model.vo.LoginVo;
 import com.group13.nsrs.model.vo.UserVo;
-import com.group13.nsrs.util.Result;
+import com.group13.nsrs.util.result.Result;
 
 /**
  * @author Oreki

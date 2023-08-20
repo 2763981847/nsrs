@@ -1,15 +1,6 @@
 package com.group13.nsrs.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.lang.Validator;
-import com.alibaba.fastjson.JSON;
-import com.aliyuncs.CommonRequest;
-import com.aliyuncs.CommonResponse;
-import com.aliyuncs.DefaultAcsClient;
-import com.aliyuncs.IAcsClient;
-import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.http.MethodType;
-import com.aliyuncs.profile.DefaultProfile;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.group13.nsrs.model.dto.LoginDto;
 import com.group13.nsrs.model.dto.RegisterDto;
@@ -22,6 +13,8 @@ import com.group13.nsrs.service.StudentService;
 import com.group13.nsrs.service.UserService;
 import com.group13.nsrs.mapper.UserMapper;
 import com.group13.nsrs.util.*;
+import com.group13.nsrs.util.result.Result;
+import com.group13.nsrs.util.result.ResultCodeEnum;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -29,8 +22,6 @@ import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Oreki
@@ -107,7 +98,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setPassword(encryptPassword(user.getPassword(), user.getSalt()));
         this.save(user);
         String token = JwtHelper.createToken(user);
-        LoginVo loginVo = BeanUtil.copyProperties(user, LoginVo.class);;
+        LoginVo loginVo = BeanUtil.copyProperties(user, LoginVo.class);
         loginVo.setToken(token);
         return Result.ok(loginVo);
     }
@@ -124,39 +115,40 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public boolean sendCode(String phone, String code) {
-        //手机号不正确则返回
-        if (!Validator.isMobile(phone)) {
-            return false;
-        }
-        //整合阿里云短信服务
-        //设置相关参数
-        DefaultProfile profile = DefaultProfile.getProfile(ConstantPropertiesUtil.REGION_Id, ConstantPropertiesUtil.ACCESS_KEY_ID, ConstantPropertiesUtil.SECRET);
-        IAcsClient client = new DefaultAcsClient(profile);
-        CommonRequest request = new CommonRequest();
-        //request.setProtocol(ProtocolType.HTTPS);
-        request.setMethod(MethodType.POST);
-        request.setDomain("dysmsapi.aliyuncs.com");
-        request.setVersion("2017-05-25");
-        request.setAction("SendSms");
-        //手机号
-        request.putQueryParameter("PhoneNumbers", phone);
-        //签名名称
-        request.putQueryParameter("SignName", "阿里云短信测试");
-        //模板code
-        request.putQueryParameter("TemplateCode", "SMS_154950909");
-        //验证码  使用json格式   {"code":"123456"}
-        Map<String, Object> param = new HashMap<>();
-        param.put("code", code);
-        request.putQueryParameter("TemplateParam", JSON.toJSONString(param));
-        //调用方法进行短信发送
-        try {
-            CommonResponse response = client.getCommonResponse(request);
-            System.out.println(response.getData());
-            return response.getHttpResponse().isSuccess();
-        } catch (ClientException e) {
-            e.printStackTrace();
-        }
-        return false;
+        return true;
+//        //手机号不正确则返回
+//        if (!Validator.isMobile(phone)) {
+//            return false;
+//        }
+//        //整合阿里云短信服务
+//        //设置相关参数
+//        DefaultProfile profile = DefaultProfile.getProfile(ConstantPropertiesUtil.REGION_Id, ConstantPropertiesUtil.ACCESS_KEY_ID, ConstantPropertiesUtil.SECRET);
+//        IAcsClient client = new DefaultAcsClient(profile);
+//        CommonRequest request = new CommonRequest();
+//        //request.setProtocol(ProtocolType.HTTPS);
+//        request.setMethod(MethodType.POST);
+//        request.setDomain("dysmsapi.aliyuncs.com");
+//        request.setVersion("2017-05-25");
+//        request.setAction("SendSms");
+//        //手机号
+//        request.putQueryParameter("PhoneNumbers", phone);
+//        //签名名称
+//        request.putQueryParameter("SignName", "阿里云短信测试");
+//        //模板code
+//        request.putQueryParameter("TemplateCode", "SMS_154950909");
+//        //验证码  使用json格式   {"code":"123456"}
+//        Map<String, Object> param = new HashMap<>();
+//        param.put("code", code);
+//        request.putQueryParameter("TemplateParam", JSON.toJSONString(param));
+//        //调用方法进行短信发送
+//        try {
+//            CommonResponse response = client.getCommonResponse(request);
+//            System.out.println(response.getData());
+//            return response.getHttpResponse().isSuccess();
+//        } catch (ClientException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
     }
 
     @Override

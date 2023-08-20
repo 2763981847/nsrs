@@ -5,7 +5,7 @@ import com.group13.nsrs.model.entity.Article;
 import com.group13.nsrs.model.entity.User;
 import com.group13.nsrs.service.ArticleService;
 import com.group13.nsrs.mapper.ArticleMapper;
-import com.group13.nsrs.util.Result;
+import com.group13.nsrs.util.result.Result;
 import com.group13.nsrs.util.thread.ThreadLocalUtil;
 import org.springframework.stereotype.Service;
 

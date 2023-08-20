@@ -2,7 +2,7 @@ package com.group13.nsrs.service;
 
 import com.group13.nsrs.model.entity.Article;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.group13.nsrs.util.Result;
+import com.group13.nsrs.util.result.Result;
 
 import java.util.List;
 

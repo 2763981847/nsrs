@@ -1,4 +1,4 @@
-package com.group13.nsrs.util;
+package com.group13.nsrs.util.result;
 
 import lombok.Getter;
 

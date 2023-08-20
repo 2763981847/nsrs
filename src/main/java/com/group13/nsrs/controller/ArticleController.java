@@ -3,7 +3,7 @@ package com.group13.nsrs.controller;
 import com.group13.nsrs.model.dto.ArticleDto;
 import com.group13.nsrs.model.entity.Article;
 import com.group13.nsrs.service.ArticleService;
-import com.group13.nsrs.util.Result;
+import com.group13.nsrs.util.result.Result;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 

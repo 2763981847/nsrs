@@ -1,12 +1,8 @@
-package com.group13.nsrs.util;
+package com.group13.nsrs.util.result;
 
-import cn.hutool.Hutool;
-import cn.hutool.http.HttpStatus;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
-import java.util.Set;
 
 /**
  * 全局统一返回结果类

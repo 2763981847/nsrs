@@ -1,6 +1,6 @@
 package com.group13.nsrs.service;
 
-import com.group13.nsrs.util.Result;
+import com.group13.nsrs.util.result.Result;
 import org.springframework.web.multipart.MultipartFile;
 
 /**

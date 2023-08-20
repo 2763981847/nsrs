@@ -2,8 +2,8 @@ package com.group13.nsrs.service.impl;
 
 import com.group13.nsrs.service.FileStorageService;
 import com.group13.nsrs.service.StorageService;
-import com.group13.nsrs.util.Result;
-import com.group13.nsrs.util.ResultCodeEnum;
+import com.group13.nsrs.util.result.Result;
+import com.group13.nsrs.util.result.ResultCodeEnum;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

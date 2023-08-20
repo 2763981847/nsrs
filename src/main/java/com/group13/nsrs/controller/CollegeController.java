@@ -1,7 +1,7 @@
 package com.group13.nsrs.controller;
 
 import com.group13.nsrs.model.entity.College;
-import com.group13.nsrs.util.Result;
+import com.group13.nsrs.util.result.Result;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
