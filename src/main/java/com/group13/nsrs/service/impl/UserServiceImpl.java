@@ -107,7 +107,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setPassword(encryptPassword(user.getPassword(), user.getSalt()));
         this.save(user);
         String token = JwtHelper.createToken(user);
-        LoginVo loginVo = BeanUtil.copyProperties(user, LoginVo.class);
+        LoginVo loginVo = BeanUtil.copyProperties(user, LoginVo.class);;
         loginVo.setToken(token);
         return Result.ok(loginVo);
     }

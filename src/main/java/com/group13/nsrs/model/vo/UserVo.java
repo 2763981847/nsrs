@@ -1,12 +1,14 @@
 package com.group13.nsrs.model.vo;
 
+import lombok.Data;
+
 import javax.annotation.Resource;
 
 /**
  * @author Fu Qiujie
  * @since 2023/8/20
  */
-@Resource
+@Data
 public class UserVo {
     private Long id;
 
