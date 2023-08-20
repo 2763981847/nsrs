@@ -15,6 +15,7 @@ import com.group13.nsrs.model.dto.LoginDto;
 import com.group13.nsrs.model.dto.RegisterDto;
 import com.group13.nsrs.model.entity.Student;
 import com.group13.nsrs.model.entity.User;
+import com.group13.nsrs.model.vo.LoginVo;
 import com.group13.nsrs.service.StudentService;
 import com.group13.nsrs.service.UserService;
 import com.group13.nsrs.mapper.UserMapper;
@@ -41,7 +42,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private StudentService studentService;
 
     @Override
-    public Result<String> login(LoginDto loginDto) {
+    public Result<LoginVo> login(LoginDto loginDto) {
         String snumber = loginDto.getSnumber();
         String password = loginDto.getPassword();
         if (StringUtils.isEmpty(snumber)) {
@@ -71,9 +72,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             // 密码错误
             return Result.fail(ResultCodeEnum.PASSWORD_ERROR);
         }
-        // 登录成功返回token
+        // 登录成功返回token和用户信息
         String token = JwtHelper.createToken(user);
-        return Result.ok(token);
+        LoginVo loginVo = BeanUtil.copyProperties(user, LoginVo.class);
+        loginVo.setToken(token);
+        return Result.ok(loginVo);
     }
 
     @NotNull
@@ -85,7 +88,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public Result<String> register(RegisterDto registerDto) {
+    public Result<LoginVo> register(RegisterDto registerDto) {
         String snumber = registerDto.getSnumber();
         if (StringUtils.isEmpty(snumber)) {
             return Result.fail(ResultCodeEnum.PARAM_ERROR, "学号不能为空");
@@ -105,7 +108,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setSalt(RandomUtil.getFourBitRandom());
         user.setPassword(encryptPassword(user.getPassword(), user.getSalt()));
         this.save(user);
-        return Result.ok(JwtHelper.createToken(user));
+        String token = JwtHelper.createToken(user);
+        LoginVo loginVo = BeanUtil.copyProperties(user, LoginVo.class);
+        loginVo.setToken(token);
+        return Result.ok(loginVo);
     }
 
     @Override

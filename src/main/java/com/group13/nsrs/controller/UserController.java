@@ -3,7 +3,8 @@ package com.group13.nsrs.controller;
 import com.group13.nsrs.model.dto.LoginDto;
 import com.group13.nsrs.model.dto.RegisterDto;
 import com.group13.nsrs.model.dto.UserUpdateDto;
-import com.group13.nsrs.model.vo.UserInfoVo;
+import com.group13.nsrs.model.vo.LoginVo;
+import com.group13.nsrs.model.vo.UserVo;
 import com.group13.nsrs.service.UserService;
 import com.group13.nsrs.util.RandomUtil;
 import com.group13.nsrs.util.Result;
@@ -28,18 +29,18 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/login")
-    public Result<String> login(@RequestBody LoginDto loginDto) {
+    public Result<LoginVo> login(@RequestBody LoginDto loginDto) {
         return userService.login(loginDto);
     }
 
     @PostMapping("/register")
-    public Result<String> register(@RequestBody RegisterDto registerDto) {
+    public Result<LoginVo> register(@RequestBody RegisterDto registerDto) {
         return userService.register(registerDto);
     }
 
 
     @GetMapping("/{id}")
-    public Result<UserInfoVo> getUserInfo(@PathVariable Long id) {
+    public Result<UserVo> getUserInfo(@PathVariable Long id) {
         return Result.ok();
     }
 
