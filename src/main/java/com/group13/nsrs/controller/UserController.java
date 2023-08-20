@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public Result<String> login(RegisterDto registerDto) {
+    public Result<String> register(RegisterDto registerDto) {
         return userService.register(registerDto);
     }
 
@@ -70,7 +70,9 @@ public class UserController {
         if (isSend) {
             //发送成功则将验证码存入Redis，并设置5分钟有效时间
             redisTemplate.opsForValue().set(phone, code, 5, TimeUnit.MINUTES);
-            return Result.ok();
-        } else return Result.fail(ResultCodeEnum.SERVICE_ERROR, "短信发送失败");
+            return Result.ok(code);
+        } else {
+            return Result.fail(ResultCodeEnum.SERVICE_ERROR, "短信发送失败");
+        }
     }
 }

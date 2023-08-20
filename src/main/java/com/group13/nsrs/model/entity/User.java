@@ -1,9 +1,7 @@
 package com.group13.nsrs.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.Data;
@@ -60,7 +58,7 @@ public class User implements Serializable {
     /**
      * 创建时间
      */
-    @TableField(value = "created_time")
+    @TableField(value = "created_time",fill = FieldFill.INSERT)
     private LocalDateTime createdTime;
 
     /**
