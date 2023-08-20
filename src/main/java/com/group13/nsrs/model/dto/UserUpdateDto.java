@@ -15,10 +15,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserUpdateDto {
-    @ApiModelProperty(value = "用户姓名")
-    private String name;
     @ApiModelProperty(value = "用户昵称")
-    private String nikeName;
+    private String name;
     @ApiModelProperty(value = "头像")
     private String avatar;
     @ApiModelProperty(value = "所属学院")
