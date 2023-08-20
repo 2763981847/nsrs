@@ -1,0 +1,8 @@
+server:
+  port: 9999
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://autumnclouds.cn:3306/nsrs
+    username: group13
+    password: 123456
