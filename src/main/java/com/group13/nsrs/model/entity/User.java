@@ -4,13 +4,13 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
 import lombok.Data;
 
 /**
- * 
  * @TableName user
  */
-@TableName(value ="user")
+@TableName(value = "user")
 @Data
 public class User implements Serializable {
     /**
@@ -58,7 +58,7 @@ public class User implements Serializable {
     /**
      * 创建时间
      */
-    @TableField(value = "created_time",fill = FieldFill.INSERT)
+    @TableField(value = "created_time", fill = FieldFill.INSERT)
     private LocalDateTime createdTime;
 
     /**
