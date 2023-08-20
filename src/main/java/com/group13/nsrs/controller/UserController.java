@@ -59,12 +59,13 @@ public class UserController {
     @ApiOperation("发送短信验证码")
     @GetMapping("/send/{phone}")
     public Result<String> sendCode(@PathVariable String phone) {
+        String code = redisTemplate.opsForValue().get(phone);
         //如果Redis中已经存在验证码则直接返回
-        if (redisTemplate.opsForValue().get(phone) != null) {
-            return Result.ok();
+        if (code != null) {
+            return Result.ok(code);
         }
         //通过工具类生成一个六位验证码
-        String code = RandomUtil.getSixBitRandom();
+        code = RandomUtil.getSixBitRandom();
         //调用短信发送服务
         boolean isSend = userService.sendCode(phone, code);
         if (isSend) {

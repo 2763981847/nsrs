@@ -19,8 +19,8 @@ public class ArticleDto {
     private String title;
     @ApiModelProperty(value = "文本内容")
     private String content;
-    @ApiModelProperty(value = "文章标签")
+    @ApiModelProperty(value = "文章标签，多个以逗号分割")
     private String labels;
-    @ApiModelProperty(value = "上传的图片")
+    @ApiModelProperty(value = "上传的图片，多个以逗号分割")
     private String images;
 }

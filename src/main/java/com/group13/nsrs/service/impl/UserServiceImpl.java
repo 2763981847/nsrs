@@ -106,15 +106,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setSalt(RandomUtil.getFourBitRandom());
         user.setPassword(encryptPassword(user.getPassword(), user.getSalt()));
         this.save(user);
-        return Result.ok();
+        return Result.ok(JwtHelper.createToken(user.getId()));
     }
 
     @Override
     public boolean sendCode(String phone, String code) {
         //手机号不正确则返回
-//        if (Validator.isMobile(phone)) {
-//            return false;
-//        }
+        if (!Validator.isMobile(phone)) {
+            return false;
+        }
         //整合阿里云短信服务
         //设置相关参数
         DefaultProfile profile = DefaultProfile.
