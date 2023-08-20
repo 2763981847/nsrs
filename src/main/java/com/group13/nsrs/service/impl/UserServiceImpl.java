@@ -35,8 +35,7 @@ import java.util.Map;
  * @createDate 2023-08-20 11:38:25
  */
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User>
-        implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Resource
     private StudentService studentService;
@@ -73,7 +72,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             return Result.fail(ResultCodeEnum.PASSWORD_ERROR);
         }
         // 登录成功返回token
-        String token = JwtHelper.createToken(user.getId());
+        String token = JwtHelper.createToken(user);
         return Result.ok(token);
     }
 
@@ -106,7 +105,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setSalt(RandomUtil.getFourBitRandom());
         user.setPassword(encryptPassword(user.getPassword(), user.getSalt()));
         this.save(user);
-        return Result.ok(JwtHelper.createToken(user.getId()));
+        return Result.ok(JwtHelper.createToken(user));
     }
 
     @Override
@@ -117,10 +116,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         //整合阿里云短信服务
         //设置相关参数
-        DefaultProfile profile = DefaultProfile.
-                getProfile(ConstantPropertiesUtil.REGION_Id,
-                        ConstantPropertiesUtil.ACCESS_KEY_ID,
-                        ConstantPropertiesUtil.SECRET);
+        DefaultProfile profile = DefaultProfile.getProfile(ConstantPropertiesUtil.REGION_Id, ConstantPropertiesUtil.ACCESS_KEY_ID, ConstantPropertiesUtil.SECRET);
         IAcsClient client = new DefaultAcsClient(profile);
         CommonRequest request = new CommonRequest();
         //request.setProtocol(ProtocolType.HTTPS);
