@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 @RestController
+@CrossOrigin //用于处理用户跨域问题
 @RequestMapping("/api/user")
 @Api(tags = "用户信息接口")
 public class UserController {
