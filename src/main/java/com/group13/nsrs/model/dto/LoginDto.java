@@ -7,7 +7,7 @@ import lombok.Data;
  * @since 2023/8/20
  */
 @Data
-public class LoginVo {
+public class LoginDto {
     private String snumber;
     private String password;
 }

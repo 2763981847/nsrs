@@ -21,7 +21,7 @@ public class JwtHelper {
      * @return token
      */
     public static String createToken(Long userId, String userName) {
-        String token = Jwts.builder()
+        return Jwts.builder()
                 .setSubject("NSRS-USER")
                 .setExpiration(new Date(System.currentTimeMillis() + UserConstants.TOKEN_EXPIRATION))
                 .claim("userId", userId)
@@ -29,7 +29,16 @@ public class JwtHelper {
                 .signWith(SignatureAlgorithm.HS512, UserConstants.TOKEN_SIGN_KEY)
                 .compressWith(CompressionCodecs.GZIP)
                 .compact();
-        return token;
+    }
+
+    public static String createToken(Long userId) {
+        return Jwts.builder()
+                .setSubject("NSRS-USER")
+                .setExpiration(new Date(System.currentTimeMillis() + UserConstants.TOKEN_EXPIRATION))
+                .claim("userId", userId)
+                .signWith(SignatureAlgorithm.HS512, UserConstants.TOKEN_SIGN_KEY)
+                .compressWith(CompressionCodecs.GZIP)
+                .compact();
     }
 
     /**

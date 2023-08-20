@@ -67,6 +67,10 @@ public class Result<T> {
         return Result.build(resultCodeEnum.getCode(), resultCodeEnum.getMessage());
     }
 
+    public static <T> Result<T> fail(ResultCodeEnum resultCodeEnum, String message) {
+        return Result.build(resultCodeEnum.getCode(), message);
+    }
+
     public static <T> Result<T> fail() {
         return Result.fail(null);
     }

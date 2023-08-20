@@ -1,7 +1,6 @@
 package com.group13.nsrs.controller;
 
 import com.group13.nsrs.model.dto.ArticleDto;
-import com.group13.nsrs.model.dto.LoginVo;
 import com.group13.nsrs.util.Result;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
