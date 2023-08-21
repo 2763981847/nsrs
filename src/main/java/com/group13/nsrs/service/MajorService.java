@@ -2,6 +2,9 @@ package com.group13.nsrs.service;
 
 import com.group13.nsrs.model.entity.Major;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.group13.nsrs.util.result.Result;
+
+import java.util.List;
 
 /**
 * @author Oreki
@@ -10,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface MajorService extends IService<Major> {
 
+    Result<List<Major>> listMajorsByCollegeId(Long collegeId);
 }

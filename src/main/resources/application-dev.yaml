@@ -1,0 +1,32 @@
+server:
+  port: 9999
+spring:
+  application:
+    name: nsrs
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://autumnclouds.cn:3306/nsrs
+    username: group13
+    password: 123456
+  redis:
+    host: ${VPS_HOST}
+    port: 6379
+    password: ${PASSWORD}
+aliyun:
+  sms:
+    regionId: default
+    accessKeyId: LTAI5tA2YTNq9cW6jakNQpye
+    secret: ${ALI_SECRET}
+minio:
+  accessKey: admin
+  secretKey: ${PASSWORD}
+  bucket: nsrs
+  endpoint: http://${VPS_HOST}:9000
+  readPath: http://${VPS_HOST}:9000
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+  # 设置别名包扫描路径，通过该属性可以给包中的类注册别名
+  type-aliases-package: com.group13.nsrs.model.entity
+  global-config:
+    datacenter-id: 1
+    workerId: 1
