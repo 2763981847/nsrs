@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.group13.nsrs.model.dto.LoginDto;
 import com.group13.nsrs.model.dto.RegisterDto;
 import com.group13.nsrs.model.dto.UpdatePWDto;
+import com.group13.nsrs.model.dto.UserUpdateDto;
 import com.group13.nsrs.model.entity.Student;
 import com.group13.nsrs.model.entity.User;
 import com.group13.nsrs.model.vo.LoginVo;
@@ -15,6 +16,7 @@ import com.group13.nsrs.mapper.UserMapper;
 import com.group13.nsrs.util.*;
 import com.group13.nsrs.util.result.Result;
 import com.group13.nsrs.util.result.ResultCodeEnum;
+import com.group13.nsrs.util.thread.ThreadLocalUtil;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -187,6 +189,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         // 修改密码
         return Result.judge(this.updatePassword(user, newPassword));
+    }
+
+    @Override
+    public Result<UserVo> getUserInfo(Long id) {
+        User user = this.getById(id);
+        if (user == null) {
+            return Result.fail(ResultCodeEnum.DATA_NOT_EXIST, "用户不存在");
+        }
+        return Result.ok(BeanUtil.copyProperties(user, UserVo.class));
+    }
+
+    @Override
+    public Result<String> updateUser(UserUpdateDto userUpdateDto) {
+        User user = ThreadLocalUtil.getUser();
+        if (user == null) {
+            return Result.fail(ResultCodeEnum.LOGIN_AURH);
+        }
+        BeanUtil.copyProperties(userUpdateDto, user);
+        boolean success = this.updateById(user);
+        return Result.judge(success);
     }
 
     private boolean updatePassword(User user, String newPassword) {

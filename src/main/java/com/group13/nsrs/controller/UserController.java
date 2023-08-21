@@ -1,9 +1,11 @@
 package com.group13.nsrs.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.group13.nsrs.model.dto.LoginDto;
 import com.group13.nsrs.model.dto.RegisterDto;
 import com.group13.nsrs.model.dto.UpdatePWDto;
 import com.group13.nsrs.model.dto.UserUpdateDto;
+import com.group13.nsrs.model.entity.User;
 import com.group13.nsrs.model.vo.LoginVo;
 import com.group13.nsrs.model.vo.UserVo;
 import com.group13.nsrs.service.UserService;
@@ -44,12 +46,12 @@ public class UserController {
 
     @GetMapping("/{id}")
     public Result<UserVo> getUserInfo(@PathVariable Long id) {
-        return Result.ok();
+        return userService.getUserInfo(id);
     }
 
     @PutMapping
     public Result<String> updateUser(@RequestBody UserUpdateDto userUpdateDto) {
-        return Result.ok();
+        return userService.updateUser(userUpdateDto);
     }
 
     @ApiOperation("更改密码")
