@@ -90,7 +90,7 @@ public class BehaviorServiceImpl implements BehaviorService {
     }
 
     @Override
-    public Result<List<Article>> getOwnCollections(Long articleId) {
+    public Result<List<Article>> getOwnCollections() {
         User user = ThreadLocalUtil.getUser();
         if (user == null) {
             return Result.fail(ResultCodeEnum.LOGIN_AURH);

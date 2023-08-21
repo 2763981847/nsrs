@@ -11,16 +11,14 @@ import lombok.NoArgsConstructor;
  * @since 2023/8/20
  */
 @Data
-@ApiModel(value = "第一次登录修改信息页面",description = "注册信息")
-@AllArgsConstructor
-@NoArgsConstructor
+@ApiModel(value = "注册用数据传输对象", description = "注册信息")
 public class RegisterDto {
-    @ApiModelProperty(value = "登录账号/学号")
+    @ApiModelProperty(value = "账号(学号)", required = true)
     private String snumber;
-    @ApiModelProperty(value = "初始化密码")
+    @ApiModelProperty(value = "初始化密码", required = true)
     private String password;
-    @ApiModelProperty(value = "电话号码")
+    @ApiModelProperty(value = "电话号码", required = true)
     private String phone;
-    @ApiModelProperty(value = "验证码")
+    @ApiModelProperty(value = "验证码", required = true)
     private String code;
 }

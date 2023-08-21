@@ -8,6 +8,8 @@ import com.group13.nsrs.service.BehaviorService;
 import com.group13.nsrs.service.CommentService;
 import com.group13.nsrs.util.result.Result;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -25,26 +27,33 @@ public class BehaviorController {
     private BehaviorService behaviorService;
 
     @GetMapping("/{articleId}")
-    public Result<BehaviorVo> getBehaviorInfo(@PathVariable Long articleId) {
+    @ApiOperation(value = "获取当前用户对指定文章的行为信息", notes = "获取当前登录用户对指定文章是否点赞，是否收藏")
+    public Result<BehaviorVo> getBehaviorInfo(@PathVariable
+                                              @ApiParam(value = "文章id", required = true)
+                                              Long articleId) {
         return behaviorService.getBehaviorInfo(articleId);
     }
 
-    @GetMapping("/collection/{articleId}")
-    public Result<List<Article>> getOwnCollections(@PathVariable Long articleId) {
-        return behaviorService.getOwnCollections(articleId);
+    @GetMapping("/collection")
+    @ApiOperation(value = "获取当前登录用户收藏的文章列表")
+    public Result<List<Article>> getOwnCollections() {
+        return behaviorService.getOwnCollections();
     }
 
     @PostMapping("/like/{articleId}")
+    @ApiOperation(value = "点赞（或取消点赞）指定文章")
     public Result<String> like(@PathVariable Long articleId) {
         return behaviorService.like(articleId);
     }
 
     @PostMapping("/collection/{articleId}")
+    @ApiOperation(value = "收藏（或取消收藏）指定文章")
     public Result<String> collection(@PathVariable Long articleId) {
         return behaviorService.collection(articleId);
     }
 
     @PostMapping("/view/{articleId}")
+    @ApiOperation(value = "浏览指定文章")
     public Result<String> view(@PathVariable Long articleId) {
         return behaviorService.view(articleId);
     }
@@ -53,12 +62,18 @@ public class BehaviorController {
     private CommentService commentService;
 
     @PostMapping("/comment")
-    public Result<Long> saveComment(@RequestBody CommentSaveDto commentSaveDto) {
+    @ApiOperation(value = "保存（发布）评论")
+    public Result<Long> saveComment(@RequestBody
+                                    @ApiParam(value = "待保存评论信息", required = true)
+                                    CommentSaveDto commentSaveDto) {
         return commentService.saveComment(commentSaveDto);
     }
 
     @GetMapping("/comment/{articleId}")
-    public Result<List<CommentVo>> listCommentsByArticleId(@PathVariable Long articleId) {
+    @ApiOperation(value = "获取指定文章的评论列表", notes = "返回的评论列表中封装了评论者的头像和昵称信息")
+    public Result<List<CommentVo>> listCommentsByArticleId(@PathVariable
+                                                           @ApiParam(value = "文章id", required = true)
+                                                           Long articleId) {
         return commentService.listCommentsByArticleId(articleId);
     }
 }

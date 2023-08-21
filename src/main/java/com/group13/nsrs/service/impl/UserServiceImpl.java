@@ -69,7 +69,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = this.lambdaQuery().eq(User::getSnumber, snumber).one();
         if (user == null) {
             // 初次登录，校验密码是否为默认密码
-            if ("123456".equals(password)) {
+            if (UserConstants.DEFAULT_PASSWORD.equals(password)) {
                 // 初次登录成功，需要绑定手机号
                 return Result.fail(ResultCodeEnum.FIRST_LOGIN);
             } else {

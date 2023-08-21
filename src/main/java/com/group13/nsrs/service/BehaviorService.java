@@ -19,5 +19,5 @@ public interface BehaviorService {
 
     Result<BehaviorVo> getBehaviorInfo(Long articleId);
 
-    Result<List<Article>> getOwnCollections(Long articleId);
+    Result<List<Article>> getOwnCollections();
 }

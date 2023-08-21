@@ -6,6 +6,8 @@ import com.group13.nsrs.service.CollegeService;
 import com.group13.nsrs.service.MajorService;
 import com.group13.nsrs.util.result.Result;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,11 +28,15 @@ public class MajorController {
     private MajorService majorService;
 
     @GetMapping("/{id}")
-    public Result<Major> getMajorInfo(@PathVariable Long id) {
+    @ApiOperation("获取指定专业信息")
+    public Result<Major> getMajorInfo(@PathVariable
+                                      @ApiParam(value = "专业id", required = true)
+                                      Long id) {
         return Result.ok(majorService.getById(id));
     }
 
     @GetMapping
+    @ApiOperation("获取所有专业信息")
     public Result<List<Major>> listCollegeInfos() {
         return Result.ok(majorService.list());
     }

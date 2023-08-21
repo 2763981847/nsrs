@@ -11,12 +11,10 @@ import lombok.NoArgsConstructor;
  * @since 2023/8/20
  */
 @Data
-@ApiModel(value = "初始登录页面",description = "初始登录页面")
-@AllArgsConstructor
-@NoArgsConstructor
+@ApiModel(value = "登录数据传输对象")
 public class LoginDto {
-    @ApiModelProperty(value = "账号/学号")
+    @ApiModelProperty(value = "账号(学号)" ,required = true)
     private String snumber;
-    @ApiModelProperty(value = "初始密码(123456)")
+    @ApiModelProperty(value = "初始密码(123456)",required = true)
     private String password;
 }

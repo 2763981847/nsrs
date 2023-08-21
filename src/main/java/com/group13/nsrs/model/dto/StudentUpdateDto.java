@@ -14,11 +14,9 @@ import java.time.LocalDate;
  * @since 2023/8/20
  */
 @Data
-@ApiModel(value = "新生信息收集",description = "收集的新生信息")
-@AllArgsConstructor
-@NoArgsConstructor
+@ApiModel(value = "新生信息收集", description = "收集的新生信息")
 public class StudentUpdateDto {
-    @ApiModelProperty(value = "性别 0 for boy,1 for girl")
+    @ApiModelProperty(value = "性别 0 - 男 1 - 女 2 - 未知")
     private Integer sex;
     @ApiModelProperty(value = "电话号码")
     private String phone;

@@ -4,6 +4,8 @@ import com.group13.nsrs.model.entity.College;
 import com.group13.nsrs.service.CollegeService;
 import com.group13.nsrs.util.result.Result;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -23,11 +25,15 @@ public class CollegeController {
     private CollegeService collegeService;
 
     @GetMapping("/{id}")
-    public Result<College> getCollegeInfo(@PathVariable Long id) {
+    @ApiOperation("获取指定学院信息")
+    public Result<College> getCollegeInfo(@PathVariable
+                                          @ApiParam(value = "学院id", required = true)
+                                          Long id) {
         return Result.ok(collegeService.getById(id));
     }
 
     @GetMapping
+    @ApiOperation("获取所有学院信息")
     public Result<List<College>> listCollegeInfos() {
         return Result.ok(collegeService.list());
     }

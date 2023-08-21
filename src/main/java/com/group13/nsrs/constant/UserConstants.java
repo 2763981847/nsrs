@@ -13,4 +13,5 @@ public class UserConstants {
     public static final String TOKEN_SIGN_KEY = "nsrs";
 
     public static final String USER_CODE_KEY = ProjectConstants.PROJECT_NAME + ":" + SERVER_NAME + ":code:";
+    public static final String DEFAULT_PASSWORD = "123456";
 }
