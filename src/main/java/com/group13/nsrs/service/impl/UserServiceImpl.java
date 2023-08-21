@@ -1,7 +1,17 @@
 package com.group13.nsrs.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.lang.Validator;
+import com.alibaba.fastjson.JSON;
+import com.aliyuncs.CommonRequest;
+import com.aliyuncs.CommonResponse;
+import com.aliyuncs.DefaultAcsClient;
+import com.aliyuncs.IAcsClient;
+import com.aliyuncs.exceptions.ClientException;
+import com.aliyuncs.http.MethodType;
+import com.aliyuncs.profile.DefaultProfile;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.group13.nsrs.constant.UserConstants;
 import com.group13.nsrs.model.dto.LoginDto;
 import com.group13.nsrs.model.dto.RegisterDto;
 import com.group13.nsrs.model.dto.UpdatePWDto;
@@ -14,16 +24,19 @@ import com.group13.nsrs.service.StudentService;
 import com.group13.nsrs.service.UserService;
 import com.group13.nsrs.mapper.UserMapper;
 import com.group13.nsrs.util.*;
+import com.group13.nsrs.util.redis.CacheService;
 import com.group13.nsrs.util.result.Result;
 import com.group13.nsrs.util.result.ResultCodeEnum;
 import com.group13.nsrs.util.thread.ThreadLocalUtil;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Oreki
@@ -35,6 +48,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Resource
     private StudentService studentService;
+
+    @Resource
+    private CacheService cacheService;
 
     @Override
     public Result<LoginVo> login(LoginDto loginDto) {
@@ -79,9 +95,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return DigestUtils.md5DigestAsHex((password + salt).getBytes());
     }
 
-    @Resource
-    private RedisTemplate<String, String> redisTemplate;
-
     @Override
     public Result<LoginVo> register(RegisterDto registerDto) {
         String snumber = registerDto.getSnumber();
@@ -106,12 +119,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     private boolean checkCode(String phone, String code) {
-        String realCode = redisTemplate.opsForValue().get(phone);
+        String key = UserConstants.USER_CODE_KEY + phone;
+        String realCode = cacheService.get(key);
         if (!code.equals(realCode)) {
             return false;
         }
         // 验证码一致，删除redis中的验证码
-        redisTemplate.delete(phone);
+        cacheService.delete(key);
         return true;
     }
 
@@ -209,6 +223,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         BeanUtil.copyProperties(userUpdateDto, user);
         boolean success = this.updateById(user);
         return Result.judge(success);
+    }
+
+    @Override
+    public Result<String> sendCode(String phone) {
+        String key = UserConstants.USER_CODE_KEY + phone;
+        String code = cacheService.get(key);
+        //如果Redis中已经存在验证码则直接返回
+        if (code != null) {
+            return Result.ok(code);
+        }
+        //通过工具类生成一个六位验证码
+        code = RandomUtil.getSixBitRandom();
+        //调用短信发送服务
+        boolean isSend = this.sendCode(phone, code);
+        if (isSend) {
+            //发送成功则将验证码存入Redis，并设置5分钟有效时间
+            cacheService.setEx(key, code, 5, TimeUnit.MINUTES);
+            return Result.ok(code);
+        } else {
+            return Result.fail(ResultCodeEnum.SERVICE_ERROR, "短信发送失败");
+        }
     }
 
     private boolean updatePassword(User user, String newPassword) {

@@ -41,4 +41,5 @@ public class ArticleController {
     public Result<List<Article>> listArticles() {
         return Result.ok(articleService.lambdaQuery().orderByDesc(Article::getCreatedTime).list());
     }
+
 }

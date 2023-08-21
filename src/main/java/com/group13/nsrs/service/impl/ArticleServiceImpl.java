@@ -12,6 +12,7 @@ import com.group13.nsrs.mapper.ArticleMapper;
 import com.group13.nsrs.util.result.Result;
 import com.group13.nsrs.util.result.ResultCodeEnum;
 import com.group13.nsrs.util.thread.ThreadLocalUtil;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,6 +59,50 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
         article.setViews(0);
         this.save(article);
         return Result.ok(article.getId());
+    }
+
+    @Override
+    @Async
+    public void incrComment(Long id) {
+        Article article = this.getById(id);
+        if (article == null) {
+            return;
+        }
+        article.setComment(article.getComment() + 1);
+        this.updateById(article);
+    }
+
+    @Override
+    @Async
+    public void updateLikes(Long articleId, Integer incr) {
+        Article article = this.getById(articleId);
+        if (article == null) {
+            return;
+        }
+        article.setLikes(article.getLikes() + incr);
+        this.updateById(article);
+    }
+
+    @Override
+    @Async
+    public void updateCollection(Long articleId, Integer incr) {
+        Article article = this.getById(articleId);
+        if (article == null) {
+            return;
+        }
+        article.setCollection(article.getCollection() + incr);
+        this.updateById(article);
+    }
+
+    @Override
+    @Async
+    public void incrView(Long articleId) {
+        Article article = this.getById(articleId);
+        if (article == null) {
+            return;
+        }
+        article.setViews(article.getViews() + 1);
+        this.updateById(article);
     }
 }
 

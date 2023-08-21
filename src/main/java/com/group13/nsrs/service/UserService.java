@@ -30,4 +30,6 @@ public interface UserService extends IService<User> {
     Result<UserVo> getUserInfo(Long id);
 
     Result<String> updateUser(UserUpdateDto userUpdateDto);
+
+    Result<String> sendCode(String phone);
 }

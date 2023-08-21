@@ -19,4 +19,12 @@ public interface ArticleService extends IService<Article> {
     Result<List<Article>> getArticlesByAuthorId(Long authorId);
 
     Result<Long> saveArticle(ArticleDto articleDto);
+
+    void incrComment(Long id);
+
+    void updateLikes(Long articleId,Integer incr);
+
+    void updateCollection(Long articleId,Integer incr);
+
+    void incrView(Long articleId);
 }

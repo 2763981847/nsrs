@@ -61,28 +61,11 @@ public class UserController {
         return userService.updatePassword(updatePWDto);
     }
 
-    @Resource
-    private RedisTemplate<String, String> redisTemplate;
 
     @ApiOperation("发送短信验证码")
     @GetMapping("/send/{phone}")
     public Result<String> sendCode(@PathVariable String phone) {
-        String code = redisTemplate.opsForValue().get(phone);
-        //如果Redis中已经存在验证码则直接返回
-        if (code != null) {
-            return Result.ok(code);
-        }
-        //通过工具类生成一个六位验证码
-        code = RandomUtil.getSixBitRandom();
-        //调用短信发送服务
-        boolean isSend = userService.sendCode(phone, code);
-        if (isSend) {
-            //发送成功则将验证码存入Redis，并设置5分钟有效时间
-            redisTemplate.opsForValue().set(phone, code, 5, TimeUnit.MINUTES);
-            return Result.ok(code);
-        } else {
-            return Result.fail(ResultCodeEnum.SERVICE_ERROR, "短信发送失败");
-        }
+        return userService.sendCode(phone);
     }
 
     @ApiOperation("找回密码")
