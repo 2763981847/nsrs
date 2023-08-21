@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @ApiModel(value = "文章发布数据传输对象", description = "用于朋友圈文章发布的数据传输对象")
-@AllArgsConstructor
-@NoArgsConstructor
 public class ArticleDto {
     @ApiModelProperty(value = "文章标题", required = true)
     private String title;
