@@ -3,6 +3,7 @@ package com.group13.nsrs.controller;
 import com.group13.nsrs.model.dto.genderRatioDTO;
 import com.group13.nsrs.util.result.Result;
 import com.group13.nsrs.util.result.ResultCodeEnum;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @CrossOrigin //用于处理用户跨域问题
 @RequestMapping("/api/statistic")
+@Api(tags = "可视化大屏接口")
 public class HtmlController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
