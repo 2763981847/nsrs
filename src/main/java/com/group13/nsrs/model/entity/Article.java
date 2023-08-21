@@ -34,11 +34,6 @@ public class Article implements Serializable {
     @TableField(value = "author_id")
     private Long authorId;
 
-    /**
-     * 作者昵称
-     */
-    @TableField(value = "author_name")
-    private String authorName;
 
     /**
      * 文章图片，多张逗号分隔

@@ -3,6 +3,7 @@ package com.group13.nsrs.service;
 import com.group13.nsrs.model.dto.ArticleDto;
 import com.group13.nsrs.model.entity.Article;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.group13.nsrs.model.vo.ArticleVo;
 import com.group13.nsrs.util.result.Result;
 
 import java.util.List;
@@ -27,4 +28,7 @@ public interface ArticleService extends IService<Article> {
     void updateCollection(Long articleId,Integer incr);
 
     void incrView(Long articleId);
+
+    Result<List<ArticleVo>> listArticles();
+
 }

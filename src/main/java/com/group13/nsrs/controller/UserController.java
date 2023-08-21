@@ -86,7 +86,7 @@ public class UserController {
         return userService.sendCode(phone);
     }
 
-    @ApiOperation("找回密码")
+    @ApiOperation(value = "找回密码")
     @GetMapping("password/{phone}/{code}/")
     public Result<UserVo> findPassword(@PathVariable
                                        @ApiParam(value = "手机号", required = true)

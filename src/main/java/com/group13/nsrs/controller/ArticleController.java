@@ -2,6 +2,7 @@ package com.group13.nsrs.controller;
 
 import com.group13.nsrs.model.dto.ArticleDto;
 import com.group13.nsrs.model.entity.Article;
+import com.group13.nsrs.model.vo.ArticleVo;
 import com.group13.nsrs.service.ArticleService;
 import com.group13.nsrs.util.result.Result;
 import io.swagger.annotations.Api;
@@ -48,8 +49,8 @@ public class ArticleController {
 
     @GetMapping
     @ApiOperation(value = "获取所有文章列表", notes = "默认按发布时间倒序排列")
-    public Result<List<Article>> listArticles() {
-        return Result.ok(articleService.lambdaQuery().orderByDesc(Article::getCreatedTime).list());
+    public Result<List<ArticleVo>> listArticles() {
+        return articleService.listArticles();
     }
 
 }

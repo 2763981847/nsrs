@@ -7,15 +7,19 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.group13.nsrs.model.dto.ArticleDto;
 import com.group13.nsrs.model.entity.Article;
 import com.group13.nsrs.model.entity.User;
+import com.group13.nsrs.model.vo.ArticleVo;
 import com.group13.nsrs.service.ArticleService;
 import com.group13.nsrs.mapper.ArticleMapper;
+import com.group13.nsrs.service.UserService;
 import com.group13.nsrs.util.result.Result;
 import com.group13.nsrs.util.result.ResultCodeEnum;
 import com.group13.nsrs.util.thread.ThreadLocalUtil;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Oreki
@@ -52,7 +56,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
         }
         Article article = BeanUtil.copyProperties(articleDto, Article.class);
         article.setAuthorId(user.getId());
-        article.setAuthorName(user.getName());
         article.setLikes(0);
         article.setCollection(0);
         article.setComment(0);
@@ -103,6 +106,26 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
         }
         article.setViews(article.getViews() + 1);
         this.updateById(article);
+    }
+
+    @Resource
+    private UserService userService;
+
+    @Override
+    public Result<List<ArticleVo>> listArticles() {
+        List<Article> articles = this.lambdaQuery().orderByDesc(Article::getCreatedTime).list();
+        List<ArticleVo> articleVos = articles.stream().map(article -> {
+            Long authorId = article.getAuthorId();
+            User user = userService.getById(authorId);
+            ArticleVo articleVo = BeanUtil.copyProperties(article, ArticleVo.class);
+            if (user == null) {
+                return articleVo;
+            }
+            articleVo.setAuthorName(user.getName());
+            articleVo.setAuthorAvatar(user.getAvatar());
+            return articleVo;
+        }).collect(Collectors.toList());
+        return Result.ok(articleVos);
     }
 }
 
