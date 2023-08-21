@@ -4,15 +4,17 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 import java.time.LocalDate;
+
 import lombok.Data;
 
 /**
- * 
+ * @author Oreki
  * @TableName student
  */
-@TableName(value ="student")
+@TableName(value = "student")
 @Data
 public class Student implements Serializable {
     /**
@@ -24,7 +26,7 @@ public class Student implements Serializable {
     /**
      * 学号
      */
-    @TableField(value = "snumber")
+    @TableId(value = "snumber")
     private String snumber;
 
     /**
@@ -32,12 +34,6 @@ public class Student implements Serializable {
      */
     @TableField(value = "college_id")
     private Long collegeId;
-
-    /**
-     * 性别 0:男 1:nv
-     */
-    @TableField(value = "sex")
-    private Integer sex;
 
     /**
      * 专业
@@ -74,6 +70,7 @@ public class Student implements Serializable {
      */
     @TableField(value = "birth")
     private LocalDate birth;
+
 
     /**
      * 省
@@ -116,6 +113,12 @@ public class Student implements Serializable {
      */
     @TableField(value = "contact_relationship")
     private String contactRelationship;
+
+    /**
+     * 性别 0:男 1:女 2:未知
+     */
+    @TableField(value = "sex")
+    private Integer sex;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
