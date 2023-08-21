@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.group13.nsrs.model.entity.College;
 import com.group13.nsrs.service.CollegeService;
 import com.group13.nsrs.mapper.CollegeMapper;
+import com.group13.nsrs.util.result.Result;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
 * @author Oreki
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CollegeServiceImpl extends ServiceImpl<CollegeMapper, College>
     implements CollegeService{
+
 
 }
 

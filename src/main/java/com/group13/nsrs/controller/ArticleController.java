@@ -24,7 +24,7 @@ public class ArticleController {
 
     @PostMapping
     public Result<Long> saveArticle(@RequestBody ArticleDto articleDto) {
-        return Result.ok();
+        return articleService.saveArticle(articleDto);
     }
 
     @GetMapping("/author/{authorId}")

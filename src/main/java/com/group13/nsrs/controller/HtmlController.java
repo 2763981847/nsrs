@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 @RestController
-@CrossOrigin //用于处理用户跨域问题
 @RequestMapping("/api/statistic")
 @Api(tags = "可视化大屏接口")
 public class HtmlController {

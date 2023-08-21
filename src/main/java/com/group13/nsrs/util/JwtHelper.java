@@ -1,6 +1,7 @@
 package com.group13.nsrs.util;
 
 
+import com.alibaba.fastjson.JSON;
 import com.group13.nsrs.constant.UserConstants;
 import com.group13.nsrs.model.entity.User;
 import io.jsonwebtoken.*;
@@ -25,7 +26,7 @@ public class JwtHelper {
         return Jwts.builder()
                 .setSubject("NSRS-USER")
                 .setExpiration(new Date(System.currentTimeMillis() + UserConstants.TOKEN_EXPIRATION))
-                .claim("user", user)
+                .claim("user", JSON.toJSONString(user))
                 .signWith(SignatureAlgorithm.HS512, UserConstants.TOKEN_SIGN_KEY)
                 .compressWith(CompressionCodecs.GZIP)
                 .compact();
@@ -43,7 +44,8 @@ public class JwtHelper {
         }
         Jws<Claims> claimsJws = Jwts.parser().setSigningKey(UserConstants.TOKEN_SIGN_KEY).parseClaimsJws(token);
         Claims claims = claimsJws.getBody();
-        return claims.get("user", User.class);
+        String userJsonString = claims.get("user", String.class);
+        return JSON.parseObject(userJsonString, User.class);
     }
 
 }
