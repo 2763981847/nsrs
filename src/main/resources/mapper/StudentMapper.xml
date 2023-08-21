@@ -1,35 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.group13.nsrs.mapper.StudentMapper">
 
-    <resultMap id="BaseResultMap" type="com.group13.nsrs.model.entity.Student">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="snumber" column="snumber" jdbcType="VARCHAR"/>
-            <result property="collegeId" column="college_id" jdbcType="BIGINT"/>
-            <result property="sex" column="sex" jdbcType="INTEGER"/>
-            <result property="majorId" column="major_id" jdbcType="BIGINT"/>
-            <result property="phone" column="phone" jdbcType="VARCHAR"/>
-            <result property="name" column="name" jdbcType="VARCHAR"/>
-            <result property="nation" column="nation" jdbcType="VARCHAR"/>
-            <result property="certificatesNo" column="certificates_no" jdbcType="VARCHAR"/>
-            <result property="birth" column="birth" jdbcType="DATE"/>
-            <result property="province" column="province" jdbcType="VARCHAR"/>
-            <result property="city" column="city" jdbcType="VARCHAR"/>
-            <result property="district" column="district" jdbcType="VARCHAR"/>
-            <result property="address" column="address" jdbcType="VARCHAR"/>
-            <result property="contactName" column="contact_name" jdbcType="VARCHAR"/>
-            <result property="contactPhone" column="contact_phone" jdbcType="VARCHAR"/>
-            <result property="contactRelationship" column="contact_relationship" jdbcType="VARCHAR"/>
-    </resultMap>
-
-    <sql id="Base_Column_List">
-        id,snumber,college_id,
-        sex,major_id,phone,
-        name,nation,certificates_no,
-        birth,province,city,
-        district,address,contact_name,
-        contact_phone,contact_relationship
-    </sql>
 </mapper>

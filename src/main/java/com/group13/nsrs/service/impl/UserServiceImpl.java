@@ -1,15 +1,6 @@
 package com.group13.nsrs.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.lang.Validator;
-import com.alibaba.fastjson.JSON;
-import com.aliyuncs.CommonRequest;
-import com.aliyuncs.CommonResponse;
-import com.aliyuncs.DefaultAcsClient;
-import com.aliyuncs.IAcsClient;
-import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.http.MethodType;
-import com.aliyuncs.profile.DefaultProfile;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.group13.nsrs.constant.UserConstants;
 import com.group13.nsrs.model.dto.LoginDto;
@@ -34,8 +25,6 @@ import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**

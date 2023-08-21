@@ -11,7 +11,6 @@ import com.group13.nsrs.service.UserService;
 import com.group13.nsrs.util.result.Result;
 import com.group13.nsrs.util.result.ResultCodeEnum;
 import com.group13.nsrs.util.thread.ThreadLocalUtil;
-import com.sun.corba.se.spi.ior.iiop.IIOPFactories;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -50,6 +49,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
         Student student = this.lambdaQuery().eq(Student::getSnumber, snumber).one();
         return Result.ok(student);
     }
+
 }
 
 
