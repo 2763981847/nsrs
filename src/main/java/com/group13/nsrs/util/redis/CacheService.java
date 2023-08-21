@@ -269,9 +269,10 @@ public class CacheService extends CachingConfigurerSupport {
      * @param unit    时间单位, 天:TimeUnit.DAYS 小时:TimeUnit.HOURS 分钟:TimeUnit.MINUTES
      *                秒:TimeUnit.SECONDS 毫秒:TimeUnit.MILLISECONDS
      */
-    public void setEx(String key, Object value, long timeout, TimeUnit unit) {
-        stringRedisTemplate.opsForValue().set(key, JSON.toJSONString(value), timeout, unit);
+    public void setEx(String key, String value, long timeout, TimeUnit unit) {
+        stringRedisTemplate.opsForValue().set(key, value, timeout, unit);
     }
+
 
     /**
      * 只有在 key 不存在时设置 key 的值

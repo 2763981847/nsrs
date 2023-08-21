@@ -36,10 +36,10 @@ public class MajorController {
     }
 
     @GetMapping("/college/{collegeId}")
-    @ApiOperation("获取指定学院下的所以专业信息")
+    @ApiOperation("获取指定学院下的所有专业信息")
     public Result<List<Major>> listMajorsByCollegeId(@PathVariable
-                                            @ApiParam(value = "学院id", required = true)
-                                            Long collegeId) {
+                                                     @ApiParam(value = "学院id", required = true)
+                                                     Long collegeId) {
         return majorService.listMajorsByCollegeId(collegeId);
     }
 
