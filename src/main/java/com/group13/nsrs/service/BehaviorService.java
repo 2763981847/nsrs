@@ -1,6 +1,6 @@
 package com.group13.nsrs.service;
 
-import com.group13.nsrs.model.entity.Article;
+import com.group13.nsrs.model.vo.ArticleVo;
 import com.group13.nsrs.model.vo.BehaviorVo;
 import com.group13.nsrs.util.result.Result;
 
@@ -19,5 +19,5 @@ public interface BehaviorService {
 
     Result<BehaviorVo> getBehaviorInfo(Long articleId);
 
-    Result<List<Article>> getOwnCollections();
+    Result<List<ArticleVo>> getOwnCollections();
 }

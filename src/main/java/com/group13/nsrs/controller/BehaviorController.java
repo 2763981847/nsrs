@@ -2,6 +2,7 @@ package com.group13.nsrs.controller;
 
 import com.group13.nsrs.model.dto.CommentSaveDto;
 import com.group13.nsrs.model.entity.Article;
+import com.group13.nsrs.model.vo.ArticleVo;
 import com.group13.nsrs.model.vo.BehaviorVo;
 import com.group13.nsrs.model.vo.CommentVo;
 import com.group13.nsrs.service.BehaviorService;
@@ -36,7 +37,7 @@ public class BehaviorController {
 
     @GetMapping("/collection")
     @ApiOperation(value = "获取当前登录用户收藏的文章列表")
-    public Result<List<Article>> getOwnCollections() {
+    public Result<List<ArticleVo>> getOwnCollections() {
         return behaviorService.getOwnCollections();
     }
 

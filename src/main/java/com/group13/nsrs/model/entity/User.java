@@ -73,6 +73,12 @@ public class User implements Serializable {
     @TableField(value = "snumber")
     private String snumber;
 
+    /**
+     * 兴趣爱好，多个用逗号隔开
+     */
+    @TableField(value = "hobbies")
+    private String hobbies;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

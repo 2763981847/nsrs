@@ -30,7 +30,7 @@ public class CollegeServiceImpl extends ServiceImpl<CollegeMapper, College>
     @Override
     public Result<List<MultiLevelSelection>> listCollegesWithMajors() {
         List<College> colleges = this.list();
-        List<MultiLevelSelection> multiLevelSelections = colleges.stream().map(
+        List<MultiLevelSelection> multiLevelSelections = colleges.parallelStream().map(
                 college -> {
                     MultiLevelSelection multiLevelSelection = new MultiLevelSelection();
                     multiLevelSelection.setValue(college.getId());
@@ -46,21 +46,9 @@ public class CollegeServiceImpl extends ServiceImpl<CollegeMapper, College>
                     return multiLevelSelection;
                 }
         ).collect(Collectors.toList());
-        setExtra(multiLevelSelections);
         return Result.ok(multiLevelSelections);
     }
 
-    private void setExtra(List<MultiLevelSelection> multiLevelSelections) {
-        for (int i = 0; i < multiLevelSelections.size(); i++) {
-            MultiLevelSelection multiLevelSelection = multiLevelSelections.get(i);
-            multiLevelSelection.setExtra(i);
-            List<MultiLevelSelection> children = multiLevelSelection.getChildren();
-            if (CollectionUtil.isEmpty(children)) {
-                continue;
-            }
-            setExtra(children);
-        }
-    }
 }
 
 

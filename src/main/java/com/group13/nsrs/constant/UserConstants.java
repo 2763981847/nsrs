@@ -8,7 +8,11 @@ public class UserConstants {
 
     public static final String SERVER_NAME = "user";
     //token过期时间（1天）
-    public static final long TOKEN_EXPIRATION = 24 * 60 * 60 * 1000;
+//    public static final long TOKEN_EXPIRATION = 24 * 60 * 60 * 1000;
+
+    //token过期时间（3天）便于测试
+    public static final long TOKEN_EXPIRATION = 72 * 60 * 60 * 1000;
+
     //token签名密钥
     public static final String TOKEN_SIGN_KEY = "nsrs";
 

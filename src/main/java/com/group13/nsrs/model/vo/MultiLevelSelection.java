@@ -14,6 +14,5 @@ import java.util.List;
 public class MultiLevelSelection {
     private Long value;
     private String label;
-    private Integer extra;
     private List<MultiLevelSelection> children;
 }
