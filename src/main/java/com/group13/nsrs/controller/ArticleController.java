@@ -35,7 +35,7 @@ public class ArticleController {
 
     @GetMapping("/author/{authorId}")
     @ApiOperation("获取指定作者的文章列表")
-    public Result<List<Article>> getArticlesByAuthorId(@PathVariable
+    public Result<List<ArticleVo>> getArticlesByAuthorId(@PathVariable
                                                        @ApiParam(value = "作者id", required = true)
                                                        Long authorId) {
         return articleService.getArticlesByAuthorId(authorId);
@@ -43,7 +43,7 @@ public class ArticleController {
 
     @GetMapping("/own")
     @ApiOperation(value = "获取当前用户发布的文章列表", notes = "需要登录")
-    public Result<List<Article>> getOwnArticles() {
+    public Result<List<ArticleVo>> getOwnArticles() {
         return articleService.getOwnArticles();
     }
 

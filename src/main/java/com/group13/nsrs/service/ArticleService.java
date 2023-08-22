@@ -15,9 +15,9 @@ import java.util.List;
 */
 public interface ArticleService extends IService<Article> {
 
-    Result<List<Article>> getOwnArticles();
+    Result<List<ArticleVo>> getOwnArticles();
 
-    Result<List<Article>> getArticlesByAuthorId(Long authorId);
+    Result<List<ArticleVo>> getArticlesByAuthorId(Long authorId);
 
     Result<Long> saveArticle(ArticleDto articleDto);
 
@@ -32,6 +32,8 @@ public interface ArticleService extends IService<Article> {
     void incrView(Long articleId);
 
     Result<List<ArticleVo>> listArticles(String query);
+
+    List<ArticleVo> packageArticles(List<Article> articles);
 
     Result<List<ArticleVo>> listHotArticles();
 }

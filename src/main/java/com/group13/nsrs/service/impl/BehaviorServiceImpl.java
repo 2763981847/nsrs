@@ -1,6 +1,7 @@
 package com.group13.nsrs.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import com.group13.nsrs.constant.ArticleConstants;
 import com.group13.nsrs.model.entity.Article;
 import com.group13.nsrs.model.entity.User;
@@ -16,6 +17,7 @@ import com.group13.nsrs.util.thread.ThreadLocalUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -104,14 +106,11 @@ public class BehaviorServiceImpl implements BehaviorService {
         }
         String key = ArticleConstants.USER_COLLECTION_KEY + user.getId();
         Set<String> articleIds = cacheService.sMembers(key);
+        if (CollectionUtil.isEmpty(articleIds)) {
+            return Result.ok(Collections.emptyList());
+        }
         List<Article> articles = articleService.listByIds(articleIds);
-        List<ArticleVo> articleVos = articles.stream().map(article -> {
-            ArticleVo articleVo = BeanUtil.copyProperties(article, ArticleVo.class);
-            User author = userService.getById(articleVo.getAuthorId());
-            articleVo.setAuthorAvatar(author.getAvatar());
-            articleVo.setAuthorName(author.getName());
-            return articleVo;
-        }).collect(Collectors.toList());
+        List<ArticleVo> articleVos = articleService.packageArticles(articles);
         return Result.ok(articleVos);
     }
 }

@@ -2,6 +2,7 @@ package com.group13.nsrs.controller;
 
 import com.group13.nsrs.model.dto.DormiRequireDto;
 import com.group13.nsrs.model.entity.DormiRequirement;
+import com.group13.nsrs.model.entity.Dormitory;
 import com.group13.nsrs.service.DormiRequirementService;
 import com.group13.nsrs.util.result.Result;
 import io.swagger.annotations.Api;
@@ -33,5 +34,25 @@ public class DormiRequireController {
     @ApiOperation("获取指定宿舍已入住人员的宿舍需求")
     public Result<List<DormiRequirement>> listByDormitory(@PathVariable Long dormitoryId) {
         return dormiRequirementService.listByDormitory(dormitoryId);
+    }
+
+    @GetMapping("/checkedInInfo")
+    @ApiOperation("获取当前登录用户入住申请信息")
+    public Result<Dormitory> getCheckedInInfo() {
+        return dormiRequirementService.getCheckedInInfo();
+    }
+
+    @PutMapping("/apply/{dormitoryId}")
+    @ApiOperation("申请入住")
+    public Result<String> apply(@PathVariable
+                                @RequestParam("申请的宿舍id")
+                                Long dormitoryId) {
+        return dormiRequirementService.apply(dormitoryId);
+    }
+
+    @PutMapping("/cancel")
+    @ApiOperation("取消当前登录用户的入住请求")
+    public Result<String> cancel() {
+        return dormiRequirementService.cancel();
     }
 }

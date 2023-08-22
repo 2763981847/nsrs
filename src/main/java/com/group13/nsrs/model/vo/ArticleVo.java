@@ -18,4 +18,8 @@ public class ArticleVo extends Article {
     private String authorName;
     @ApiModelProperty(value = "作者头像")
     private String authorAvatar;
+    @ApiModelProperty(value = "是否点赞")
+    private Boolean isLiked;
+    @ApiModelProperty(value = "是否已收藏")
+    private Boolean isCollected;
 }

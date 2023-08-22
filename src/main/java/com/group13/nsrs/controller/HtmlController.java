@@ -60,9 +60,10 @@ public class HtmlController {
 
     public Result dayReportNum() {
         try {
-            String sql = "SELECT report_date, COUNT(*) AS count\n" +
-                    "FROM student\n" +
-                    "GROUP BY report_date;";
+            String sql = "select DATE_FORMAT(report_date, '%c.%e') as report_date," +
+                    "COUNT(*) AS count " +
+                    "FROM student " +
+                    "GROUP BY report_date";
             List<DayReportDTo> dayReort = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(DayReportDTo.class));
             return Result.ok(dayReort);
         } catch (Exception e) {

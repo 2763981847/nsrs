@@ -10,14 +10,17 @@ import com.group13.nsrs.model.dto.ArticleDto;
 import com.group13.nsrs.model.entity.Article;
 import com.group13.nsrs.model.entity.User;
 import com.group13.nsrs.model.vo.ArticleVo;
+import com.group13.nsrs.model.vo.BehaviorVo;
 import com.group13.nsrs.model.vo.HotArticleVo;
 import com.group13.nsrs.service.ArticleService;
 import com.group13.nsrs.mapper.ArticleMapper;
+import com.group13.nsrs.service.BehaviorService;
 import com.group13.nsrs.service.UserService;
 import com.group13.nsrs.util.redis.CacheService;
 import com.group13.nsrs.util.result.Result;
 import com.group13.nsrs.util.result.ResultCodeEnum;
 import com.group13.nsrs.util.thread.ThreadLocalUtil;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -37,19 +40,27 @@ import java.util.stream.Collectors;
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
 
     @Override
-    public Result<List<Article>> getOwnArticles() {
+    public Result<List<ArticleVo>> getOwnArticles() {
         User user = ThreadLocalUtil.getUser();
         if (user == null) {
             // 未登录
             return Result.ok();
         }
-        return this.getArticlesByAuthorId(user.getId());
+        List<Article> articles = this.lambdaQuery().eq(Article::getAuthorId, user.getId()).orderByDesc(Article::getCreatedTime).list();
+        List<ArticleVo> articleVos = packageArticles(articles);
+        return Result.ok(articleVos);
     }
 
     @Override
-    public Result<List<Article>> getArticlesByAuthorId(Long authorId) {
+    public Result<List<ArticleVo>> getArticlesByAuthorId(Long authorId) {
+        User user = ThreadLocalUtil.getUser();
+        if (user == null) {
+            // 未登录
+            return Result.fail(ResultCodeEnum.LOGIN_AURH);
+        }
         List<Article> articles = this.lambdaQuery().eq(Article::getAuthorId, authorId).orderByDesc(Article::getCreatedTime).list();
-        return Result.ok(articles);
+        List<ArticleVo> articleVos = packageArticles(articles);
+        return Result.ok(articleVos);
     }
 
     @Override
@@ -164,6 +175,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Resource
     private UserService userService;
 
+    @Resource
+    @Lazy
+    private BehaviorService behaviorService;
+
     @Override
     public Result<List<ArticleVo>> listArticles(String query) {
         List<Article> articles;
@@ -179,7 +194,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                     .orderByDesc(Article::getCreatedTime)
                     .list();
         }
-        List<ArticleVo> articleVos = articles.stream().map(article -> {
+        List<ArticleVo> articleVos = packageArticles(articles);
+
+        return Result.ok(articleVos);
+    }
+
+    @Override
+    public List<ArticleVo> packageArticles(List<Article> articles) {
+        return articles.stream().map(article -> {
             Long authorId = article.getAuthorId();
             User user = userService.getById(authorId);
             ArticleVo articleVo = BeanUtil.copyProperties(article, ArticleVo.class);
@@ -188,16 +210,31 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             }
             articleVo.setAuthorName(user.getName());
             articleVo.setAuthorAvatar(user.getAvatar());
+            setUserBehavior(articleVo);
             return articleVo;
         }).collect(Collectors.toList());
-        return Result.ok(articleVos);
+    }
+
+    private void setUserBehavior(ArticleVo articleVo) {
+        Result<BehaviorVo> res = behaviorService.getBehaviorInfo(articleVo.getId());
+        if (!res.isOk()) {
+            return;
+        }
+        BehaviorVo behaviorVo = res.getData();
+        articleVo.setIsLiked(behaviorVo.getIsLiked());
+        articleVo.setIsCollected(behaviorVo.getIsCollected());
     }
 
     @Override
     public Result<List<ArticleVo>> listHotArticles() {
         String key = ArticleConstants.HOT_ARTICLE_KEY;
         List<HotArticleVo> hotArticleVos = JSON.parseArray(cacheService.get(key), HotArticleVo.class);
-        List<ArticleVo> articleVos = hotArticleVos.stream().map(hotArticleVo -> BeanUtil.copyProperties(hotArticleVo, ArticleVo.class)).collect(Collectors.toList());
+        List<ArticleVo> articleVos = hotArticleVos.stream().map(hotArticleVo -> {
+                    ArticleVo articleVo = BeanUtil.copyProperties(hotArticleVo, ArticleVo.class);
+                    setUserBehavior(articleVo);
+                    return articleVo;
+                }
+        ).collect(Collectors.toList());
         return Result.ok(articleVos);
     }
 }
