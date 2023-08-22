@@ -25,7 +25,7 @@ public class DormiRequirement implements Serializable {
      * 学号
      */
     @TableField(value = "snumber")
-    private Long snumber;
+    private String snumber;
 
     /**
      * qq号

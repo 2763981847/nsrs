@@ -1,13 +1,16 @@
 package com.group13.nsrs.service;
 
+import com.group13.nsrs.model.dto.DormiRequireDto;
 import com.group13.nsrs.model.entity.DormiRequirement;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.group13.nsrs.util.result.Result;
 
 /**
 * @author Oreki
 * @description 针对表【domi_requirement】的数据库操作Service
 * @createDate 2023-08-22 15:51:56
 */
-public interface DomiRequirementService extends IService<DormiRequirement> {
+public interface DormiRequirementService extends IService<DormiRequirement> {
 
+    Result<String> saveDormiRequire(DormiRequireDto dormiRequireDto);
 }
