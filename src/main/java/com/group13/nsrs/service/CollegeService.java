@@ -2,6 +2,7 @@ package com.group13.nsrs.service;
 
 import com.group13.nsrs.model.entity.College;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.group13.nsrs.model.vo.MultiLevelSelection;
 import com.group13.nsrs.util.result.Result;
 
 import java.util.List;
@@ -14,5 +15,6 @@ import java.util.List;
 public interface CollegeService extends IService<College> {
 
 
+    Result<List<MultiLevelSelection>> listCollegesWithMajors();
 
 }

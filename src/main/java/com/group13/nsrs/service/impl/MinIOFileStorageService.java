@@ -8,6 +8,7 @@ import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -23,6 +24,7 @@ import java.util.Date;
  */
 @Service
 @Slf4j
+@ConditionalOnBean(MinIOConfigProperties.class)
 public class MinIOFileStorageService implements FileStorageService {
 
     @Resource

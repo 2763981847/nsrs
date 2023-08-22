@@ -28,4 +28,6 @@ public class UserVo {
     private String snumber;
     @ApiModelProperty(value = "用户身份")
     private Integer role;
+    @ApiModelProperty(value = "兴趣爱好，多个爱好用逗号隔开")
+    private String hobbies;
 }

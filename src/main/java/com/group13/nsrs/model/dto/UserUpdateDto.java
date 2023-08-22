@@ -21,4 +21,7 @@ public class UserUpdateDto {
     private String college;
     @ApiModelProperty(value = "用户性别 0:男 1:女 2:未知")
     private Integer sex;
+
+    @ApiModelProperty(value = "兴趣爱好，多个爱好用逗号隔开")
+    private String hobbies;
 }

@@ -1,4 +1,4 @@
-package com.group13.nsrs.service;
+package com.group13.nsrs.init;
 
 import com.group13.nsrs.NsrsApplication;
 import org.junit.runner.RunWith;

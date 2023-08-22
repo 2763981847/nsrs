@@ -3,6 +3,7 @@ package com.group13.nsrs.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.group13.nsrs.model.dto.StudentUpdateDto;
 import com.group13.nsrs.model.entity.Student;
+import com.group13.nsrs.model.vo.StudentVo;
 import com.group13.nsrs.util.result.Result;
 
 /**
@@ -14,6 +15,6 @@ public interface StudentService extends IService<Student> {
 
     Result<String> updateStudent(StudentUpdateDto studentUpdateDto);
 
-    Result<Student> getStudentInfo();
+    Result<StudentVo> getStudentInfo();
 
 }

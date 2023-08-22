@@ -3,21 +3,27 @@ package com.group13.nsrs.service.impl;
 import java.time.LocalDateTime;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.group13.nsrs.constant.ArticleConstants;
 import com.group13.nsrs.model.dto.ArticleDto;
 import com.group13.nsrs.model.entity.Article;
 import com.group13.nsrs.model.entity.User;
 import com.group13.nsrs.model.vo.ArticleVo;
+import com.group13.nsrs.model.vo.HotArticleVo;
 import com.group13.nsrs.service.ArticleService;
 import com.group13.nsrs.mapper.ArticleMapper;
 import com.group13.nsrs.service.UserService;
+import com.group13.nsrs.util.redis.CacheService;
 import com.group13.nsrs.util.result.Result;
 import com.group13.nsrs.util.result.ResultCodeEnum;
 import com.group13.nsrs.util.thread.ThreadLocalUtil;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,6 +68,59 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
         article.setViews(0);
         this.save(article);
         return Result.ok(article.getId());
+    }
+
+    @Resource
+    private CacheService cacheService;
+
+    // 每小时执行一次
+    @Scheduled(cron = "0 0 */1 * * ?")
+    @Override
+    public void computeHotArticle() {
+        // 查询五天内的所有文章
+        LocalDateTime dayParam = LocalDateTime.now().minusDays(5);
+        List<ArticleVo> articleVos = this.listArticles().getData();
+        articleVos = articleVos.stream()
+                .filter(articleVo -> articleVo.getCreatedTime().isAfter(dayParam))
+                .collect(Collectors.toList());
+        // 计算文章热度
+        List<HotArticleVo> hotArticleVos = computeHotArticle(articleVos);
+        // 取出前三十缓存到redis
+        String key = ArticleConstants.HOT_ARTICLE_KEY;
+        List<HotArticleVo> articlesToCache = hotArticleVos.stream()
+                .sorted(Comparator.comparing(HotArticleVo::getScore).reversed())
+                .limit(30).collect(Collectors.toList());
+        cacheService.set(key, articlesToCache);
+    }
+
+    private List<HotArticleVo> computeHotArticle(List<ArticleVo> articles) {
+        return articles.stream()
+                .map(articleVo -> {
+                    HotArticleVo hotArticleVo = BeanUtil.copyProperties(articleVo, HotArticleVo.class);
+                    hotArticleVo.setScore(computeScore(hotArticleVo));
+                    return hotArticleVo;
+                }).collect(Collectors.toList());
+    }
+
+    private Integer computeScore(HotArticleVo hotArticleVo) {
+        int score = 0;
+        // 1.阅读数
+        if (hotArticleVo.getViews() != null) {
+            score += hotArticleVo.getViews();
+        }
+        // 2.点赞数
+        if (hotArticleVo.getLikes() != null) {
+            score += hotArticleVo.getLikes() * ArticleConstants.HOT_ARTICLE_LIKE_WEIGHT;
+        }
+        // 3.评论数
+        if (hotArticleVo.getComment() != null) {
+            score += hotArticleVo.getComment() * ArticleConstants.HOT_ARTICLE_COMMENT_WEIGHT;
+        }
+        // 4.收藏数
+        if (hotArticleVo.getCollection() != null) {
+            score += hotArticleVo.getCollection() * ArticleConstants.HOT_ARTICLE_COLLECTION_WEIGHT;
+        }
+        return score;
     }
 
     @Override
@@ -125,6 +184,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
             articleVo.setAuthorAvatar(user.getAvatar());
             return articleVo;
         }).collect(Collectors.toList());
+        return Result.ok(articleVos);
+    }
+
+    @Override
+    public Result<List<ArticleVo>> listHotArticles() {
+        String key = ArticleConstants.HOT_ARTICLE_KEY;
+        List<HotArticleVo> hotArticleVos = JSON.parseArray( cacheService.get(key), HotArticleVo.class);
+        List<ArticleVo> articleVos = hotArticleVos.stream()
+                .map(hotArticleVo -> BeanUtil.copyProperties(hotArticleVo, ArticleVo.class))
+                .collect(Collectors.toList());
         return Result.ok(articleVos);
     }
 }

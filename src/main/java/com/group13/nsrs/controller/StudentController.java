@@ -2,6 +2,7 @@ package com.group13.nsrs.controller;
 
 import com.group13.nsrs.model.dto.StudentUpdateDto;
 import com.group13.nsrs.model.entity.Student;
+import com.group13.nsrs.model.vo.StudentVo;
 import com.group13.nsrs.service.StudentService;
 import com.group13.nsrs.util.result.Result;
 import io.swagger.annotations.Api;
@@ -33,7 +34,7 @@ public class StudentController {
 
     @GetMapping
     @ApiOperation(value = "获取当前登录用户的学生信息", notes = "需要登录")
-    public Result<Student> getStudentInfo() {
+    public Result<StudentVo> getStudentInfo() {
         return studentService.getStudentInfo();
     }
 }

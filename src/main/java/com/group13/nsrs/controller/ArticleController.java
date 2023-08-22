@@ -53,4 +53,9 @@ public class ArticleController {
         return articleService.listArticles();
     }
 
+    @GetMapping("/hot")
+    @ApiOperation(value = "获取热门文章列表", notes = "按热度顺序排序前三十的文章")
+    public Result<List<ArticleVo>> listHotArticles() {
+        return articleService.listHotArticles();
+    }
 }
