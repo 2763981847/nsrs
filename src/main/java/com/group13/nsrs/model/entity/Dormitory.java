@@ -42,8 +42,8 @@ public class Dormitory implements Serializable {
     /**
      * 0 - 男生宿舍 1 - 女生宿舍
      */
-    @TableField(value = "male")
-    private Integer male;
+    @TableField(value = "sex")
+    private Integer sex;
 
     /**
      * 入住人数

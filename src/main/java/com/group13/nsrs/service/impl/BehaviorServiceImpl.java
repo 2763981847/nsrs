@@ -88,8 +88,8 @@ public class BehaviorServiceImpl implements BehaviorService {
         String likeKey = ArticleConstants.USER_LIKES_KEY + user.getId();
         String collectionKey = ArticleConstants.USER_COLLECTION_KEY + user.getId();
         BehaviorVo behaviorVo = new BehaviorVo();
-        behaviorVo.setIsLiked(cacheService.sIsMember(likeKey, articleId));
-        behaviorVo.setIsCollected(cacheService.sIsMember(collectionKey, articleId));
+        behaviorVo.setIsLiked(cacheService.sIsMember(likeKey, articleId.toString()));
+        behaviorVo.setIsCollected(cacheService.sIsMember(collectionKey, articleId.toString()));
         return Result.ok(behaviorVo);
     }
 
