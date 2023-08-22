@@ -1,6 +1,7 @@
 package com.group13.nsrs.controller;
 
 import com.group13.nsrs.model.entity.College;
+import com.group13.nsrs.model.vo.MultiLevelSelection;
 import com.group13.nsrs.service.CollegeService;
 import com.group13.nsrs.util.result.Result;
 import io.swagger.annotations.Api;
@@ -36,6 +37,12 @@ public class CollegeController {
     @ApiOperation("获取所有学院信息")
     public Result<List<College>> listCollegeInfos() {
         return Result.ok(collegeService.list());
+    }
+
+    @GetMapping("/CollegesWithMajors")
+    @ApiOperation("获取所有学院信息及其下面的专业信息")
+    public Result<List<MultiLevelSelection>> listCollegesWithMajors() {
+        return collegeService.listCollegesWithMajors();
     }
 
 

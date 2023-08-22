@@ -4,15 +4,16 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 import java.time.LocalDate;
+
 import lombok.Data;
 
 /**
- * 
  * @TableName student
  */
-@TableName(value ="student")
+@TableName(value = "student")
 @Data
 public class Student implements Serializable {
     /**
@@ -116,6 +117,12 @@ public class Student implements Serializable {
      */
     @TableField(value = "sex")
     private Integer sex;
+
+    /**
+     * 是否已报道 0:未报道 1:已报道
+     */
+    @TableField(value = "isReported")
+    private Integer isReported;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

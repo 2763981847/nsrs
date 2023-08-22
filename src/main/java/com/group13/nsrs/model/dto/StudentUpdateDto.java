@@ -23,6 +23,10 @@ public class StudentUpdateDto {
     private String phone;
     @ApiModelProperty(value = "姓名")
     private String name;
+    @ApiModelProperty(value = "学院id")
+    private Long collegeId;
+    @ApiModelProperty(value = "专业id")
+    private Long majorId;
     @ApiModelProperty(value = "民族")
     private String nation;
     @ApiModelProperty(value = "身份证号")
@@ -43,4 +47,6 @@ public class StudentUpdateDto {
     private String contactPhone;
     @ApiModelProperty(value = "联系人关系")
     private String contactRelationship;
+    @ApiModelProperty(value = "是否已经报到 0 - 未报到 1 - 已报到")
+    private Integer isReported;
 }
