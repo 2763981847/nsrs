@@ -20,11 +20,13 @@ import com.group13.nsrs.util.result.Result;
 import com.group13.nsrs.util.result.ResultCodeEnum;
 import com.group13.nsrs.util.thread.ThreadLocalUtil;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -202,6 +204,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         return Result.ok(BeanUtil.copyProperties(user, UserVo.class));
     }
+
+    @Resource
+    JdbcTemplate jdbcTemplate;
 
     @Override
     public Result<String> updateUser(UserUpdateDto userUpdateDto) {

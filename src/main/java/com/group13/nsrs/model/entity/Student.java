@@ -119,10 +119,17 @@ public class Student implements Serializable {
     private Integer sex;
 
     /**
-     * 是否已报道 0:未报道 1:已报道
+     * -1 - 未开始，0-6 - 进行到了第几步，7 - 已报到
      */
-    @TableField(value = "isReported")
-    private Integer isReported;
+    @TableField(value = "reported_status")
+    private Integer reportedStatus;
+
+
+    /**
+     * 报到日期
+     */
+    @TableField(value = "report_date")
+    private LocalDate reportDate;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

@@ -47,6 +47,8 @@ public class StudentUpdateDto {
     private String contactPhone;
     @ApiModelProperty(value = "联系人关系")
     private String contactRelationship;
-    @ApiModelProperty(value = "是否已经报到 0 - 未报到 1 - 已报到")
-    private Integer isReported;
+    @ApiModelProperty(value = "-1 - 未开始，0-6 - 进行到了第几步，7 - 已报到")
+    private Integer reportedStatus;
+    @ApiModelProperty(value = "报到日期")
+    private LocalDate reportDate;
 }

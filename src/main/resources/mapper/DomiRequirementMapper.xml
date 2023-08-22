@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group13.nsrs.mapper.DomiRequirementMapper">
+
+    <resultMap id="BaseResultMap" type="com.group13.nsrs.model.entity.DormiRequirement">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="snumber" column="snumber" jdbcType="BIGINT"/>
+            <result property="qq" column="qq" jdbcType="VARCHAR"/>
+            <result property="phone" column="phone" jdbcType="VARCHAR"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="dormitoryId" column="dormitory_id" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,snumber,qq,
+        phone,name,content,
+        dormitory_id
+    </sql>
+</mapper>

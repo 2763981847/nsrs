@@ -21,6 +21,7 @@ import com.group13.nsrs.util.thread.ThreadLocalUtil;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Comparator;
@@ -33,8 +34,7 @@ import java.util.stream.Collectors;
  * @createDate 2023-08-20 11:00:40
  */
 @Service
-public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
-        implements ArticleService {
+public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
 
     @Override
     public Result<List<Article>> getOwnArticles() {
@@ -48,8 +48,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
 
     @Override
     public Result<List<Article>> getArticlesByAuthorId(Long authorId) {
-        List<Article> articles = this.lambdaQuery().eq(Article::getAuthorId, authorId)
-                .orderByDesc(Article::getCreatedTime).list();
+        List<Article> articles = this.lambdaQuery().eq(Article::getAuthorId, authorId).orderByDesc(Article::getCreatedTime).list();
         return Result.ok(articles);
     }
 
@@ -79,27 +78,22 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
     public void computeHotArticle() {
         // 查询五天内的所有文章
         LocalDateTime dayParam = LocalDateTime.now().minusDays(5);
-        List<ArticleVo> articleVos = this.listArticles().getData();
-        articleVos = articleVos.stream()
-                .filter(articleVo -> articleVo.getCreatedTime().isAfter(dayParam))
-                .collect(Collectors.toList());
+        List<ArticleVo> articleVos = this.listArticles("").getData();
+        articleVos = articleVos.stream().filter(articleVo -> articleVo.getCreatedTime().isAfter(dayParam)).collect(Collectors.toList());
         // 计算文章热度
         List<HotArticleVo> hotArticleVos = computeHotArticle(articleVos);
         // 取出前三十缓存到redis
         String key = ArticleConstants.HOT_ARTICLE_KEY;
-        List<HotArticleVo> articlesToCache = hotArticleVos.stream()
-                .sorted(Comparator.comparing(HotArticleVo::getScore).reversed())
-                .limit(30).collect(Collectors.toList());
+        List<HotArticleVo> articlesToCache = hotArticleVos.stream().sorted(Comparator.comparing(HotArticleVo::getScore).reversed()).limit(30).collect(Collectors.toList());
         cacheService.set(key, articlesToCache);
     }
 
     private List<HotArticleVo> computeHotArticle(List<ArticleVo> articles) {
-        return articles.stream()
-                .map(articleVo -> {
-                    HotArticleVo hotArticleVo = BeanUtil.copyProperties(articleVo, HotArticleVo.class);
-                    hotArticleVo.setScore(computeScore(hotArticleVo));
-                    return hotArticleVo;
-                }).collect(Collectors.toList());
+        return articles.stream().map(articleVo -> {
+            HotArticleVo hotArticleVo = BeanUtil.copyProperties(articleVo, HotArticleVo.class);
+            hotArticleVo.setScore(computeScore(hotArticleVo));
+            return hotArticleVo;
+        }).collect(Collectors.toList());
     }
 
     private Integer computeScore(HotArticleVo hotArticleVo) {
@@ -171,8 +165,20 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
     private UserService userService;
 
     @Override
-    public Result<List<ArticleVo>> listArticles() {
-        List<Article> articles = this.lambdaQuery().orderByDesc(Article::getCreatedTime).list();
+    public Result<List<ArticleVo>> listArticles(String query) {
+        List<Article> articles;
+        if (StringUtils.isEmpty(query)) {
+            // 查询所有文章
+            articles = this.lambdaQuery().orderByDesc(Article::getCreatedTime).list();
+        } else {
+            // 模糊查询
+            articles = this.lambdaQuery()
+                    .like(Article::getTitle, query)
+                    .or().like(Article::getContent, query)
+                    .or().like(Article::getLabels, query)
+                    .orderByDesc(Article::getCreatedTime)
+                    .list();
+        }
         List<ArticleVo> articleVos = articles.stream().map(article -> {
             Long authorId = article.getAuthorId();
             User user = userService.getById(authorId);
@@ -190,10 +196,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
     @Override
     public Result<List<ArticleVo>> listHotArticles() {
         String key = ArticleConstants.HOT_ARTICLE_KEY;
-        List<HotArticleVo> hotArticleVos = JSON.parseArray( cacheService.get(key), HotArticleVo.class);
-        List<ArticleVo> articleVos = hotArticleVos.stream()
-                .map(hotArticleVo -> BeanUtil.copyProperties(hotArticleVo, ArticleVo.class))
-                .collect(Collectors.toList());
+        List<HotArticleVo> hotArticleVos = JSON.parseArray(cacheService.get(key), HotArticleVo.class);
+        List<ArticleVo> articleVos = hotArticleVos.stream().map(hotArticleVo -> BeanUtil.copyProperties(hotArticleVo, ArticleVo.class)).collect(Collectors.toList());
         return Result.ok(articleVos);
     }
 }
