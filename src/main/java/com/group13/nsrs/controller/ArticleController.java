@@ -48,9 +48,11 @@ public class ArticleController {
     }
 
     @GetMapping
-    @ApiOperation(value = "获取所有文章列表", notes = "默认按发布时间倒序排列")
-    public Result<List<ArticleVo>> listArticles() {
-        return articleService.listArticles();
+    @ApiOperation(value = "获取所有文章列表(支持模糊查询)", notes = "默认按发布时间倒序排列")
+    public Result<List<ArticleVo>> listArticles(@RequestParam
+                                                @ApiParam(value = "查询关键字")
+                                                String query) {
+        return articleService.listArticles(query);
     }
 
     @GetMapping("/hot")

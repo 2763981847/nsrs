@@ -12,6 +12,7 @@ import com.group13.nsrs.service.UserService;
 import com.group13.nsrs.util.RandomUtil;
 import com.group13.nsrs.util.result.Result;
 import com.group13.nsrs.util.result.ResultCodeEnum;
+import com.group13.nsrs.util.thread.ThreadLocalUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
@@ -59,6 +60,16 @@ public class UserController {
                                       @ApiParam(value = "用户id", required = true)
                                       Long id) {
         return userService.getUserInfo(id);
+    }
+
+    @GetMapping
+    @ApiOperation(value = "获取登录用户信息")
+    public Result<UserVo> getUserInfo() {
+        User user = ThreadLocalUtil.getUser();
+        if (user == null) {
+            return Result.fail(ResultCodeEnum.DATA_NOT_EXIST, "用户不存在");
+        }
+        return userService.getUserInfo(user.getId());
     }
 
     @PutMapping

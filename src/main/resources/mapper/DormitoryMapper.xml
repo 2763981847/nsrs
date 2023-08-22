@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group13.nsrs.mapper.DormitoryMapper">
+
+    <resultMap id="BaseResultMap" type="com.group13.nsrs.model.entity.Dormitory">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="dormitoryno" column="dormitoryno" jdbcType="VARCHAR"/>
+            <result property="building" column="building" jdbcType="VARCHAR"/>
+            <result property="collegeId" column="college_id" jdbcType="BIGINT"/>
+            <result property="male" column="male" jdbcType="TINYINT"/>
+            <result property="count" column="count" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,dormitoryno,building,
+        college_id,male,count
+    </sql>
+</mapper>

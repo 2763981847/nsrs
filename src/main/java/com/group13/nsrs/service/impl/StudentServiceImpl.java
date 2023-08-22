@@ -17,6 +17,7 @@ import com.group13.nsrs.util.thread.ThreadLocalUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author Oreki
@@ -35,6 +36,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
 
     @Override
     public Result<String> updateStudent(StudentUpdateDto studentUpdateDto) {
+
         User user = ThreadLocalUtil.getUser();
         if (user == null) {
             return Result.fail(ResultCodeEnum.LOGIN_AURH);
