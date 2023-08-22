@@ -1,6 +1,9 @@
 package com.group13.nsrs.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.IdcardUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.group13.nsrs.model.dto.StudentUpdateDto;
 import com.group13.nsrs.model.entity.Major;
@@ -36,13 +39,17 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
 
     @Override
     public Result<String> updateStudent(StudentUpdateDto studentUpdateDto) {
-
         User user = ThreadLocalUtil.getUser();
         if (user == null) {
             return Result.fail(ResultCodeEnum.LOGIN_AURH);
         }
+        if (!IdcardUtil.isValidCard(studentUpdateDto.getCertificatesNo())) {
+            return Result.fail(ResultCodeEnum.PARAM_ERROR, "身份证号码不合法");
+        }
         String snumber = userService.getById(user.getId()).getSnumber();
         Student student = BeanUtil.copyProperties(studentUpdateDto, Student.class);
+        DateTime birthDate = IdcardUtil.getBirthDate(student.getCertificatesNo());
+        student.setBirth(birthDate.toLocalDateTime().toLocalDate());
         boolean success = this.lambdaUpdate().eq(Student::getSnumber, snumber).update(student);
         return Result.judge(success);
     }

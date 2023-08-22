@@ -1,5 +1,6 @@
 package com.group13.nsrs.controller;
 
+import cn.hutool.core.util.IdcardUtil;
 import com.group13.nsrs.model.dto.*;
 import com.group13.nsrs.util.result.Result;
 import com.group13.nsrs.util.result.ResultCodeEnum;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/statistic")
@@ -21,14 +23,15 @@ import java.util.*;
 public class HtmlController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
     @ApiOperation(value = "统计报道成功的学生人数",
             protocols = "http",
-            httpMethod="GET",
-            response= Result.class,
+            httpMethod = "GET",
+            response = Result.class,
             notes = "统计报道成功的学生人数")
     @GetMapping("/dynamicNum")
 
-    public Result dynamicNnum(){
+    public Result dynamicNnum() {
         try {
             String sql = "SELECT\n" +
                     "    COUNT(*) AS dynamic_num\n" +
@@ -36,41 +39,42 @@ public class HtmlController {
                     "    student\n" +
                     "WHERE\n" +
                     "    reported_status = 7;";
-            List<DynamicNumDTO> dynNum= jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(DynamicNumDTO.class));
+            List<DynamicNumDTO> dynNum = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(DynamicNumDTO.class));
             return Result.ok(dynNum);
-        }catch (Exception e){
-            return  Result.fail(ResultCodeEnum.DATA_ERROR);
+        } catch (Exception e) {
+            return Result.fail(ResultCodeEnum.DATA_ERROR);
         }
     }
 
     //统计每天报道的人数
     @ApiOperation(value = "按照日期统计人数",
             protocols = "http",
-            httpMethod="GET",
-            response= Result.class,
+            httpMethod = "GET",
+            response = Result.class,
             notes = "特定日期报道的人数")
     @GetMapping("/dayReportNum")
 
-    public Result dayReportNum(){
+    public Result dayReportNum() {
         try {
             String sql = "SELECT report_date, COUNT(*) AS count\n" +
                     "FROM student\n" +
                     "GROUP BY report_date;";
-            List<DayReportDTo> dayReort= jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(DayReportDTo.class));
+            List<DayReportDTo> dayReort = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(DayReportDTo.class));
             return Result.ok(dayReort);
-        }catch (Exception e){
-            return  Result.fail(ResultCodeEnum.DATA_ERROR);
+        } catch (Exception e) {
+            return Result.fail(ResultCodeEnum.DATA_ERROR);
         }
     }
+
     //统计男生和女生总人数
     @ApiOperation(value = "统计男生和女生总人数",
             protocols = "http",
-            httpMethod="GET",
-            response= Result.class,
+            httpMethod = "GET",
+            response = Result.class,
             notes = "统计男生和女生总人数")
     @GetMapping("/genderRatio")
 
-    public Result genderRation(){
+    public Result genderRation() {
         try {
             String sql = "SELECT\n" +
                     "    SUM(\n" +
@@ -83,22 +87,22 @@ public class HtmlController {
                     ") AS female_count\n" +
                     "FROM\n" +
                     "    student;";
-            List<GenderRatioDTO> genRa= jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(GenderRatioDTO.class));
+            List<GenderRatioDTO> genRa = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(GenderRatioDTO.class));
             return Result.ok(genRa);
-        }catch (Exception e){
-            return  Result.fail(ResultCodeEnum.DATA_ERROR);
+        } catch (Exception e) {
+            return Result.fail(ResultCodeEnum.DATA_ERROR);
         }
     }
 
 
     @ApiOperation(value = "统计年龄分布",
             protocols = "http",
-            httpMethod="GET",
-            response= Result.class,
+            httpMethod = "GET",
+            response = Result.class,
             notes = "统计年龄分布")
     @GetMapping("/ageDistrition")
 
-    public Result ageDistri(){
+    public Result ageDistri() {
         try {
             //根据所填出生日期计算年龄
             String sql = "SELECT \n" +
@@ -110,22 +114,22 @@ public class HtmlController {
                     "    age\n" +
                     "ORDER BY\n" +
                     "    age;\n";
-            List<AgeDistributionDTO> ageDis= jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(AgeDistributionDTO.class));
+            List<AgeDistributionDTO> ageDis = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(AgeDistributionDTO.class));
             return Result.ok(ageDis);
-        }catch (Exception e){
-            return  Result.fail(ResultCodeEnum.DATA_ERROR);
+        } catch (Exception e) {
+            return Result.fail(ResultCodeEnum.DATA_ERROR);
         }
     }
 
 
     @ApiOperation(value = "统计兴趣爱好分布",
             protocols = "http",
-            httpMethod="GET",
-            response= Result.class,
+            httpMethod = "GET",
+            response = Result.class,
             notes = "统计兴趣爱好分布")
     @GetMapping("/hobbiesDistri")
 
-    public Result hobbiesDistri(){
+    public Result hobbiesDistri() {
         try {
             List<String> hobbies = jdbcTemplate.queryForList("SELECT hobbies FROM user", String.class);
             List<String> sp_hobbies = new ArrayList<>();
@@ -141,8 +145,8 @@ public class HtmlController {
 //            System.out.println(map);
             return Result.ok(map);
 
-        }catch (Exception e){
-            return  Result.fail(ResultCodeEnum.DATA_ERROR);
+        } catch (Exception e) {
+            return Result.fail(ResultCodeEnum.DATA_ERROR);
         }
     }
 
