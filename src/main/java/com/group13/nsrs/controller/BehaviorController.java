@@ -41,19 +41,19 @@ public class BehaviorController {
         return behaviorService.getOwnCollections();
     }
 
-    @PostMapping("/like/{articleId}")
+    @PutMapping("/like/{articleId}")
     @ApiOperation(value = "点赞（或取消点赞）指定文章")
     public Result<String> like(@PathVariable Long articleId) {
         return behaviorService.like(articleId);
     }
 
-    @PostMapping("/collection/{articleId}")
+    @PutMapping("/collection/{articleId}")
     @ApiOperation(value = "收藏（或取消收藏）指定文章")
     public Result<String> collection(@PathVariable Long articleId) {
         return behaviorService.collection(articleId);
     }
 
-    @PostMapping("/view/{articleId}")
+    @PutMapping("/view/{articleId}")
     @ApiOperation(value = "浏览指定文章")
     public Result<String> view(@PathVariable Long articleId) {
         return behaviorService.view(articleId);

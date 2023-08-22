@@ -5,6 +5,7 @@ import com.group13.nsrs.model.entity.Article;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.group13.nsrs.model.vo.ArticleVo;
 import com.group13.nsrs.util.result.Result;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.List;
 
@@ -21,6 +22,8 @@ public interface ArticleService extends IService<Article> {
 
     Result<Long> saveArticle(ArticleDto articleDto);
 
+    void computeHotArticle();
+
     void incrComment(Long id);
 
     void updateLikes(Long articleId,Integer incr);
@@ -31,4 +34,5 @@ public interface ArticleService extends IService<Article> {
 
     Result<List<ArticleVo>> listArticles();
 
+    Result<List<ArticleVo>> listHotArticles();
 }

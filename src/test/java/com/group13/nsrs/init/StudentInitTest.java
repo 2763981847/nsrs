@@ -1,8 +1,10 @@
-package com.group13.nsrs.service;
+package com.group13.nsrs.init;
 
 import com.group13.nsrs.NsrsApplication;
 import com.group13.nsrs.model.entity.Major;
 import com.group13.nsrs.model.entity.Student;
+import com.group13.nsrs.service.MajorService;
+import com.group13.nsrs.service.StudentService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
