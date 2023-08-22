@@ -12,6 +12,8 @@ import com.group13.nsrs.util.result.ResultCodeEnum;
 import com.group13.nsrs.util.thread.ThreadLocalUtil;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author Oreki
  * @description 针对表【domi_requirement】的数据库操作Service实现
@@ -31,6 +33,14 @@ public class DormiRequirementServiceImpl extends ServiceImpl<DomiRequirementMapp
         dormiRequirement.setSnumber(user.getSnumber());
         this.save(dormiRequirement);
         return Result.ok();
+    }
+
+    @Override
+    public Result<List<DormiRequirement>> listByDormitory(Long dormitoryId) {
+        List<DormiRequirement> dormiRequirements = this.lambdaQuery()
+                .eq(DormiRequirement::getDormitoryId, dormitoryId)
+                .list();
+        return Result.ok(dormiRequirements);
     }
 }
 

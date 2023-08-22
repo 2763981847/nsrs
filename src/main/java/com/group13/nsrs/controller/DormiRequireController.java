@@ -6,12 +6,10 @@ import com.group13.nsrs.service.DormiRequirementService;
 import com.group13.nsrs.util.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author Fu Qiujie
@@ -28,5 +26,12 @@ public class DormiRequireController {
     @ApiOperation("保存宿舍需求")
     public Result<String> save(@RequestBody DormiRequireDto dormiRequireDto) {
         return dormiRequirementService.saveDormiRequire(dormiRequireDto);
+    }
+
+
+    @GetMapping("/{dormitoryId}")
+    @ApiOperation("获取指定宿舍已入住人员的宿舍需求")
+    public Result<List<DormiRequirement>> listByDormitory(@PathVariable Long dormitoryId) {
+        return dormiRequirementService.listByDormitory(dormitoryId);
     }
 }

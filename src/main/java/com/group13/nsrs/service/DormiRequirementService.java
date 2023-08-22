@@ -5,6 +5,8 @@ import com.group13.nsrs.model.entity.DormiRequirement;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.group13.nsrs.util.result.Result;
 
+import java.util.List;
+
 /**
 * @author Oreki
 * @description 针对表【domi_requirement】的数据库操作Service
@@ -13,4 +15,6 @@ import com.group13.nsrs.util.result.Result;
 public interface DormiRequirementService extends IService<DormiRequirement> {
 
     Result<String> saveDormiRequire(DormiRequireDto dormiRequireDto);
+
+    Result<List<DormiRequirement>> listByDormitory(Long dormitoryId);
 }

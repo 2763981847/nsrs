@@ -17,9 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @author Oreki
+ */
 @RestController
 @RequestMapping("/api/statistic")
 @Api(tags = "可视化大屏接口")
+@CrossOrigin//处理跨域问题
 public class HtmlController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
