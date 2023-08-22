@@ -36,7 +36,17 @@ public class DormitoryServiceImpl extends ServiceImpl<DormitoryMapper, Dormitory
         Student student = studentService
                 .lambdaQuery()
                 .eq(Student::getSnumber, snumber).one();
-        return Result.ok();
+        if (student.getCollegeId() == null) {
+            return Result.fail(ResultCodeEnum.NEED_REFINE_INFORMATION, "需先完善学院信息");
+        }
+        if (student.getSex() == null) {
+            return Result.fail(ResultCodeEnum.NEED_REFINE_INFORMATION, "需先完善性别信息");
+        }
+        List<Dormitory> dormitories = this.lambdaQuery()
+                .eq(Dormitory::getCollegeId, student.getCollegeId())
+                .eq(Dormitory::getSex, student.getSex())
+                .list();
+        return Result.ok(dormitories);
     }
 }
 

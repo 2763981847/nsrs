@@ -24,9 +24,8 @@ public enum ResultCodeEnum {
 
     LOGIN_AURH(214, "需要登录"),
     LOGIN_AUTH(208, "未登陆"),
-    LOGIN_DISABLED_ERROR(212, "该用户已被禁用") //    LOGIN_MOBLE_ERROR(211, "账号不正确"),
-    ,
-
+    LOGIN_DISABLED_ERROR(212, "该用户已被禁用"), //    LOGIN_MOBLE_ERROR(211, "账号不正确"),
+    NEED_REFINE_INFORMATION(220, "需要完善信息"),
 
     PARAM_ERROR(202, "参数不正确"),
     PERMISSION(209, "没有权限"),
