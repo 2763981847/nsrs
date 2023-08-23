@@ -29,6 +29,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -95,8 +96,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         List<HotArticleVo> hotArticleVos = computeHotArticle(articleVos);
         // 取出前三十缓存到redis
         String key = ArticleConstants.HOT_ARTICLE_KEY;
-        List<HotArticleVo> articlesToCache = hotArticleVos.stream().sorted(Comparator.comparing(HotArticleVo::getScore).reversed()).limit(30).collect(Collectors.toList());
-        cacheService.set(key, articlesToCache);
+        hotArticleVos.stream()
+                .sorted(Comparator.comparing(HotArticleVo::getScore).reversed()).limit(30)
+                .forEach(hotArticleVo -> cacheService.zAdd(key, hotArticleVo.getId().toString(), hotArticleVo.getScore()));
     }
 
     private List<HotArticleVo> computeHotArticle(List<ArticleVo> articles) {
@@ -228,13 +230,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public Result<List<ArticleVo>> listHotArticles() {
         String key = ArticleConstants.HOT_ARTICLE_KEY;
-        List<HotArticleVo> hotArticleVos = JSON.parseArray(cacheService.get(key), HotArticleVo.class);
-        List<ArticleVo> articleVos = hotArticleVos.stream().map(hotArticleVo -> {
-                    ArticleVo articleVo = BeanUtil.copyProperties(hotArticleVo, ArticleVo.class);
-                    setUserBehavior(articleVo);
-                    return articleVo;
-                }
-        ).collect(Collectors.toList());
+        Set<String> hotArticleIds = cacheService.zReverseRange(key, 0, 30);
+        List<Article> articles = hotArticleIds.stream()
+                .map(hotArticleId -> this.getById(Long.parseLong(hotArticleId)))
+                .collect(Collectors.toList());
+        List<ArticleVo> articleVos = packageArticles(articles);
         return Result.ok(articleVos);
     }
 }

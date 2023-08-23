@@ -1032,8 +1032,8 @@ public class CacheService extends CachingConfigurerSupport {
      * @param score
      * @return
      */
-    public Boolean zAdd(String key, Object value, double score) {
-        return stringRedisTemplate.opsForZSet().add(key, JSON.toJSONString(value), score);
+    public Boolean zAdd(String key, String value, double score) {
+        return stringRedisTemplate.opsForZSet().add(key, value, score);
     }
 
     /**

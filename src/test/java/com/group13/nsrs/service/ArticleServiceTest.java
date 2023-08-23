@@ -1,12 +1,15 @@
 package com.group13.nsrs.service;
 
 import com.group13.nsrs.NsrsApplication;
+import com.group13.nsrs.model.vo.ArticleVo;
+import com.group13.nsrs.util.result.Result;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author Fu Qiujie
@@ -25,6 +28,7 @@ public class ArticleServiceTest {
 
     @Test
     public void testListHotArticles() {
-        articleService.listHotArticles();
+        Result<List<ArticleVo>> listResult = articleService.listHotArticles();
+        System.out.println(listResult.getData().get(0).getId());
     }
 }
