@@ -7,6 +7,7 @@ import com.group13.nsrs.service.DormiRequirementService;
 import com.group13.nsrs.util.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -22,6 +23,12 @@ import java.util.List;
 public class DormiRequireController {
     @Resource
     private DormiRequirementService dormiRequirementService;
+
+    @GetMapping("/user")
+    @ApiOperation("获取当前登录用户的宿舍需求")
+    public Result<DormiRequirement> getByUser() {
+        return dormiRequirementService.getByUser();
+    }
 
     @PostMapping
     @ApiOperation("保存宿舍需求")
@@ -45,7 +52,7 @@ public class DormiRequireController {
     @PutMapping("/apply/{dormitoryId}")
     @ApiOperation("申请入住")
     public Result<String> apply(@PathVariable
-                                @RequestParam("申请的宿舍id")
+                                @ApiParam("申请的宿舍id")
                                 Long dormitoryId) {
         return dormiRequirementService.apply(dormitoryId);
     }

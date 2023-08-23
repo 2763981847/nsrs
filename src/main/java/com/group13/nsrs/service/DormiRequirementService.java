@@ -27,4 +27,5 @@ public interface DormiRequirementService extends IService<DormiRequirement> {
 
     Result<String> cancel();
 
+    Result<DormiRequirement> getByUser();
 }

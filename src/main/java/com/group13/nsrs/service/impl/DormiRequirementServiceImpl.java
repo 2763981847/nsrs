@@ -99,7 +99,7 @@ public class DormiRequirementServiceImpl extends ServiceImpl<DomiRequirementMapp
         }
         Dormitory dormitory = dormitoryService.getById(dormitoryId);
         if (dormitory.getCount() >= 4) {
-            return Result.fail(ResultCodeEnum.FAIL, "该宿舍已满");
+            return Result.fail(ResultCodeEnum.PARAM_ERROR, "该宿舍已满");
         }
         dormitory.setCount(dormitory.getCount() + 1);
         dormitoryService.updateById(dormitory);
@@ -118,14 +118,31 @@ public class DormiRequirementServiceImpl extends ServiceImpl<DomiRequirementMapp
         DormiRequirement dormiRequirement = this.lambdaQuery()
                 .eq(DormiRequirement::getSnumber, snumber)
                 .one();
+        if (dormiRequirement == null || dormiRequirement.getDormitoryId() == null) {
+            return Result.fail(ResultCodeEnum.DATA_NOT_EXIST, "未申请入住");
+        }
         Dormitory dormitory = dormitoryService.lambdaQuery()
                 .eq(Dormitory::getId, dormiRequirement.getDormitoryId())
                 .one();
         dormitory.setCount(dormitory.getCount() - 1);
         dormitoryService.updateById(dormitory);
-        dormiRequirement.setDormitoryId(null);
-        this.updateById(dormiRequirement);
+        this.lambdaUpdate()
+                .eq(DormiRequirement::getId, dormiRequirement.getId())
+                .set(DormiRequirement::getDormitoryId, null).update();
         return Result.ok();
+    }
+
+    @Override
+    public Result<DormiRequirement> getByUser() {
+        User user = ThreadLocalUtil.getUser();
+        if (user == null) {
+            return Result.fail(ResultCodeEnum.LOGIN_AURH);
+        }
+        String snumber = user.getSnumber();
+        DormiRequirement dormiRequirement = this.lambdaQuery()
+                .eq(DormiRequirement::getSnumber, snumber)
+                .one();
+        return Result.ok(dormiRequirement);
     }
 }
 
