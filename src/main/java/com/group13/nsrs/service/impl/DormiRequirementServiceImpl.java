@@ -32,9 +32,12 @@ public class DormiRequirementServiceImpl extends ServiceImpl<DomiRequirementMapp
         if (user == null) {
             return Result.fail(ResultCodeEnum.LOGIN_AURH);
         }
-        DormiRequirement dormiRequirement = BeanUtil.copyProperties(dormiRequireDto, DormiRequirement.class);
-        dormiRequirement.setSnumber(user.getSnumber());
-        this.save(dormiRequirement);
+        String snumber = user.getSnumber();
+        DormiRequirement requirement = this.lambdaQuery()
+                .eq(DormiRequirement::getSnumber, snumber)
+                .one();
+        BeanUtil.copyProperties(dormiRequireDto, requirement);
+        this.saveOrUpdate(requirement);
         return Result.ok();
     }
 
