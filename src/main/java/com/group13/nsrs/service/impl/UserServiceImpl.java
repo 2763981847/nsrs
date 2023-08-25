@@ -181,15 +181,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public Result<String> updatePassword(UpdatePWDto updatePWDto) {
         // 判断是修改密码还是重置密码
         String oldPassword = updatePWDto.getOldPassword();
-        Long userId = updatePWDto.getUserId();
+
         String newPassword = updatePWDto.getNewPassword();
-        User user = this.getById(userId);
+
         if (StringUtils.isEmpty(oldPassword)) {
             // 重置密码
+            Long userId = updatePWDto.getUserId();
+            User user = this.getById(userId);
             boolean success = this.updatePassword(user, newPassword);
             return Result.judge(success);
         }
         // 修改密码
+        User user = ThreadLocalUtil.getUser();
+        if (user == null) {
+            return Result.fail(ResultCodeEnum.LOGIN_AURH);
+        }
+        user = this.getById(user.getId());
         // 校验旧密码是否正确
         String salt = user.getSalt();
         String encryptPassword = encryptPassword(oldPassword, salt);
@@ -238,9 +245,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //通过工具类生成一个六位验证码
         code = RandomUtil.getSixBitRandom();
         //调用短信发送服务
-//        boolean isSend = this.sendCode(phone, code);
-        // 为了方便测试，暂不调用短信发送服务
-        boolean isSend = true;
+        boolean isSend = this.sendCode(phone, code);
+//        // 为了方便测试，暂不调用短信发送服务
+//        boolean isSend = true;
         if (isSend) {
             //发送成功则将验证码存入Redis，并设置5分钟有效时间
             cacheService.setEx(key, code, 5, TimeUnit.MINUTES);

@@ -136,7 +136,7 @@ public class HtmlController {
 
     public Result hobbiesDistri() {
         try {
-            List<String> hobbies = jdbcTemplate.queryForList("SELECT hobbies FROM user", String.class);
+            List<String> hobbies = jdbcTemplate.queryForList("SELECT hobbies FROM user WHERE hobbies != ''", String.class);
             List<String> sp_hobbies = new ArrayList<>();
 
             for (String hobby : hobbies) {
