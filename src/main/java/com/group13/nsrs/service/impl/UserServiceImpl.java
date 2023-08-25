@@ -239,6 +239,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         code = RandomUtil.getSixBitRandom();
         //调用短信发送服务
 //        boolean isSend = this.sendCode(phone, code);
+        // 为了方便测试，暂不调用短信发送服务
         boolean isSend = true;
         if (isSend) {
             //发送成功则将验证码存入Redis，并设置5分钟有效时间
