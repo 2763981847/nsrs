@@ -17,4 +17,5 @@ public interface StudentService extends IService<Student> {
 
     Result<StudentVo> getStudentInfo();
 
+    Result<String> updateStatus(Integer reportedStatus);
 }

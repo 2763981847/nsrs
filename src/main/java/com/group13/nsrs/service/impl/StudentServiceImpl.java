@@ -43,12 +43,13 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
         if (user == null) {
             return Result.fail(ResultCodeEnum.LOGIN_AURH);
         }
-        if (!IdcardUtil.isValidCard(studentUpdateDto.getCertificatesNo())) {
+        String certificatesNo = studentUpdateDto.getCertificatesNo();
+        if (!IdcardUtil.isValidCard(certificatesNo)) {
             return Result.fail(ResultCodeEnum.PARAM_ERROR, "身份证号码不合法");
         }
         String snumber = userService.getById(user.getId()).getSnumber();
         Student student = BeanUtil.copyProperties(studentUpdateDto, Student.class);
-        DateTime birthDate = IdcardUtil.getBirthDate(student.getCertificatesNo());
+        DateTime birthDate = IdcardUtil.getBirthDate(certificatesNo);
         student.setBirth(birthDate.toLocalDateTime().toLocalDate());
         boolean success = this.lambdaUpdate().eq(Student::getSnumber, snumber).update(student);
         return Result.judge(success);
@@ -68,6 +69,20 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
         studentVo.setCollegeName(major.getCollegeName());
         studentVo.setMajorName(major.getName());
         return Result.ok(studentVo);
+    }
+
+    @Override
+    public Result<String> updateStatus(Integer reportedStatus) {
+        User user = ThreadLocalUtil.getUser();
+        if (user == null) {
+            return Result.fail(ResultCodeEnum.LOGIN_AURH);
+        }
+        String snumber = userService.getById(user.getId()).getSnumber();
+        boolean success = this.lambdaUpdate()
+                .eq(Student::getSnumber, snumber)
+                .set(Student::getReportedStatus, reportedStatus)
+                .update();
+        return Result.judge(success);
     }
 
 }

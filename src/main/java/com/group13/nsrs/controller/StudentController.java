@@ -32,6 +32,14 @@ public class StudentController {
         return studentService.updateStudent(studentUpdateDto);
     }
 
+    @PutMapping("/reported_status/{reportedStatus}")
+    @ApiOperation(value = "更新学生报到状态", notes = "报到流程时使用")
+    public Result<String> updateStudent(@PathVariable
+                                        @ApiParam(value = "待更新学生报到状态", required = true)
+                                        Integer reportedStatus) {
+        return studentService.updateStatus(reportedStatus);
+    }
+
     @GetMapping
     @ApiOperation(value = "获取当前登录用户的学生信息", notes = "需要登录")
     public Result<StudentVo> getStudentInfo() {
