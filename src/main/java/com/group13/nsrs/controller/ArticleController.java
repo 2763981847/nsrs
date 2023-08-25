@@ -1,7 +1,6 @@
 package com.group13.nsrs.controller;
 
 import com.group13.nsrs.model.dto.ArticleDto;
-import com.group13.nsrs.model.entity.Article;
 import com.group13.nsrs.model.vo.ArticleVo;
 import com.group13.nsrs.service.ArticleService;
 import com.group13.nsrs.util.result.Result;
@@ -33,11 +32,19 @@ public class ArticleController {
         return articleService.saveArticle(articleDto);
     }
 
+    @GetMapping("/{articleId}")
+    @ApiOperation("获取指定文章信息")
+    public Result<ArticleVo> getArticle(@PathVariable
+                                        @ApiParam(value = "文章id", required = true)
+                                        Long articleId) {
+        return articleService.getArticle(articleId);
+    }
+
     @GetMapping("/author/{authorId}")
     @ApiOperation("获取指定作者的文章列表")
     public Result<List<ArticleVo>> getArticlesByAuthorId(@PathVariable
-                                                       @ApiParam(value = "作者id", required = true)
-                                                       Long authorId) {
+                                                         @ApiParam(value = "作者id", required = true)
+                                                         Long authorId) {
         return articleService.getArticlesByAuthorId(authorId);
     }
 

@@ -36,4 +36,6 @@ public interface ArticleService extends IService<Article> {
     List<ArticleVo> packageArticles(List<Article> articles);
 
     Result<List<ArticleVo>> listHotArticles();
+
+    Result<ArticleVo> getArticle(Long articleId);
 }

@@ -3,7 +3,6 @@ package com.group13.nsrs.service.impl;
 import java.time.LocalDateTime;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.group13.nsrs.constant.ArticleConstants;
 import com.group13.nsrs.model.dto.ArticleDto;
@@ -27,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -236,6 +236,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 .collect(Collectors.toList());
         List<ArticleVo> articleVos = packageArticles(articles);
         return Result.ok(articleVos);
+    }
+
+    @Override
+    public Result<ArticleVo> getArticle(Long articleId) {
+        Article article = this.getById(articleId);
+        if (article == null) {
+            return Result.fail(ResultCodeEnum.PARAM_ERROR, "文章不存在");
+        }
+        ArticleVo articleVo = packageArticles(Collections.singletonList(article)).get(0);
+        return Result.ok(articleVo);
     }
 }
 

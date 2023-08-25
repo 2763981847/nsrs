@@ -243,6 +243,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (isSend) {
             //发送成功则将验证码存入Redis，并设置5分钟有效时间
             cacheService.setEx(key, code, 5, TimeUnit.MINUTES);
+            // 为了方便测试，直接返回验证码
             return Result.ok(code);
         } else {
             return Result.fail(ResultCodeEnum.SERVICE_ERROR, "短信发送失败");
