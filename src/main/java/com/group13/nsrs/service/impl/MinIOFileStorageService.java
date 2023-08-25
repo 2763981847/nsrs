@@ -80,37 +80,6 @@ public class MinIOFileStorageService implements FileStorageService {
             throw new RuntimeException("上传文件失败");
         }
     }
-
-    /**
-     * 上传html文件
-     *
-     * @param prefix      文件前缀
-     * @param filename    文件名
-     * @param inputStream 文件流
-     * @return 文件全路径
-     */
-    @Override
-    public String uploadHtmlFile(String prefix, String filename, InputStream inputStream) {
-        String filePath = builderFilePath(prefix, filename);
-        try {
-            PutObjectArgs putObjectArgs = PutObjectArgs.builder()
-                    .object(filePath)
-                    .contentType("text/html")
-                    .bucket(minIOConfigProperties.getBucket()).stream(inputStream, inputStream.available(), -1)
-                    .build();
-            minioClient.putObject(putObjectArgs);
-            StringBuilder urlPath = new StringBuilder(minIOConfigProperties.getReadPath());
-            urlPath.append(separator + minIOConfigProperties.getBucket());
-            urlPath.append(separator);
-            urlPath.append(filePath);
-            return urlPath.toString();
-        } catch (Exception ex) {
-            log.error("minio put file error.", ex);
-            ex.printStackTrace();
-            throw new RuntimeException("上传文件失败");
-        }
-    }
-
     /**
      * 删除文件
      *
