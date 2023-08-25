@@ -50,8 +50,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         if (article == null) {
             return Result.fail(ResultCodeEnum.PARAM_ERROR, "文章不存在");
         }
-        article.setComment(article.getComment() + 1);
-        articleService.updateById(article);
+        articleService.incrComment(articleId);
         Comment comment = BeanUtil.copyProperties(commentSaveDto, Comment.class);
         comment.setUserId(user.getId());
         this.save(comment);
