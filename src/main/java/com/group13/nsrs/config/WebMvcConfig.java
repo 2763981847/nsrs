@@ -3,6 +3,7 @@ package com.group13.nsrs.config;
 
 import com.group13.nsrs.interceptor.TokenInterceptor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -14,7 +15,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/**")
+                .excludePathPatterns("/api/user/login", "/api/user/register");
     }
+
 
 }
